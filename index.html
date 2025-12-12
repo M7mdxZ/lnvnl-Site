@@ -7,34 +7,239 @@
 
   <style>
     :root{
-      --bg:#070a10; --card:#0e1626; --text:#e5e7eb; --muted:#9ca3af;
-      --border:#1f2937; --btn:#e5e7eb; --btnText:#070a10;
-      --glow: 120, 180, 255; /* rgb */
-      --good:#34d399; --bad:#fb7185; --warn:#fbbf24;
+      --bg:#070a10;
+      --card:#0e1626;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --border:#1f2937;
+      --btn:#e5e7eb;
+      --btnText:#070a10;
+      --good:#34d399;
+      --bad:#fb7185;
+      --glow:120,180,255;
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
-      background: radial-gradient(900px 450px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
-                  radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
-                  var(--bg);
-      color: var(--text);
       min-height:100vh;
+      min-height:100dvh; /* mobile fix */
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(800px 400px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
+        radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
+        var(--bg);
       display:grid;
       place-items:center;
-      padding: 26px;
+      padding:24px;
+      color:var(--text);
       overflow:hidden;
     }
-    .blob{
-      position:absolute; width:520px; height:520px; border-radius:999px;
-      filter: blur(40px); opacity:.12;
-      background: radial-gradient(circle at 30% 30%, rgba(var(--glow),.9), transparent 55%);
-      animation: floaty 10s ease-in-out infinite; pointer-events:none;
+
+    .card{
+      width:100%;
+      max-width:520px;
+      background:rgba(14,22,38,.75);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:26px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      backdrop-filter: blur(10px);
+      animation: fadeUp .6s ease forwards;
     }
-    .blob.b2{
-      width:640px;height:640px; left:auto;right:-240px;top:10%;
-      background: radial-gradient(circle at 40% 40%, rgba(180,255,220,.8), transparent 55%);
+
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(14px)}
+      to{opacity:1; transform:none}
+    }
+
+    h1{
+      font-size:44px;
+      margin:0;
+      font-weight:800;
+      text-align:center;
+    }
+
+    .sub{
+      text-align:center;
+      color:var(--muted);
+      margin:6px 0 20px;
+    }
+
+    .server{
+      background:rgba(0,0,0,.25);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+    }
+
+    .label{
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:8px;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .ip{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+      font-size:18px;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--bad);
+      box-shadow:0 0 14px rgba(251,113,133,.6);
+    }
+    .dot.online{
+      background:var(--good);
+      box-shadow:0 0 14px rgba(52,211,153,.6);
+    }
+
+    .btn{
+      padding:10px 14px;
+      border:none;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      background:var(--btn);
+      color:var(--btnText);
+    }
+
+    .pill{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .actions{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .linkbtn{
+      padding:10px 16px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:transparent;
+      color:var(--text);
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    .footer{
+      margin-top:14px;
+      font-size:12px;
+      color:var(--muted);
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <h1>lnvnl</h1>
+    <div class="sub">Minecraft server (Java)</div>
+
+    <div class="server">
+      <div class="label">Server Address</div>
+
+      <div class="row">
+        <div class="ip">
+          <span class="dot" id="statusDot"></span>
+          <span id="serverIp">mc.lnvnl.org</span>
+        </div>
+        <button class="btn" onclick="copyIP()">Copy</button>
+      </div>
+
+      <div class="pill">
+        <span id="statusText">Checking…</span>
+        <span id="playersText">Players: —/—</span>
+        <span id="serverVer">—</span>
+      </div>
+
+      <div class="pill">
+        <span>Latest Minecraft</span>
+        <span>v <strong id="latestVer">—</strong></span>
+      </div>
+
+      <div class="actions">
+        <a class="linkbtn" href="https://panel.lnvnl.org" target="_blank">Panel</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      Multiplayer → Add Server → paste the address
+    </div>
+  </main>
+
+  <script>
+    const SERVER = "mc.lnvnl.org";
+
+    function copyIP(){
+      navigator.clipboard.writeText(SERVER);
+    }
+
+    async function loadStatus(){
+      try{
+        const res = await fetch(`https://api.mcsrvstat.us/3/${SERVER}`, {cache:"no-store"});
+        const d = await res.json();
+
+        const dot = document.getElementById("statusDot");
+        const status = document.getElementById("statusText");
+
+        if(d.online){
+          dot.classList.add("online");
+          status.textContent = "Online";
+          document.getElementById("playersText").textContent =
+            `Players: ${d.players.online}/${d.players.max}`;
+          document.getElementById("serverVer").textContent =
+            `Server: ${d.protocol?.name || d.version}`;
+        }else{
+          status.textContent = "Offline";
+        }
+      }catch{}
+    }
+
+    async function loadLatest(){
+      try{
+        const r = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json",{cache:"no-store"});
+        const j = await r.json();
+        document.getElementById("latestVer").textContent = j.latest.release;
+      }catch{
+        document.getElementById("latestVer").textContent = "Latest";
+      }
+    }
+
+    loadStatus();
+    loadLatest();
+    setInterval(loadStatus, 120000);
+  </script>
+</body>
+</html>      background: radial-gradient(circle at 40% 40%, rgba(180,255,220,.8), transparent 55%);
       animation-duration: 12s; opacity:.10;
     }
     .blob.b1{left:-220px; top:35%;}
