@@ -6,14 +6,12 @@
   <meta name="theme-color" content="#070a10" />
   <title>Mnwab</title>
 
-  <!-- Minecraft font -->
-  <style>
-    @font-face {
-      font-family: "Minecraft";
-      src: url("https://fonts.cdnfonts.com/s/14280/Minecraftia-Regular.ttf") format("truetype");
-      font-display: swap;
-    }
-  </style>
+  <!-- Pixel/Minecraft-ish font (only used for the server address) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link id="favicon" rel="icon" href="" />
 
   <style>
     :root{
@@ -22,11 +20,14 @@
       --text:#e5e7eb;
       --muted:#9ca3af;
       --border:#1f2937;
+
       --btn:#e5e7eb;
       --btnText:#070a10;
+
       --good:#34d399;
       --bad:#fb7185;
       --warn:#fbbf24;
+
       --glow:120,180,255;
     }
 
@@ -35,7 +36,7 @@
     body{
       margin:0;
       min-height:100vh;
-      min-height:100dvh;
+      min-height:100dvh; /* mobile-safe */
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       display:grid;
@@ -48,149 +49,8 @@
         var(--bg);
     }
 
-    /* snow */
-    .snow{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .flake{
-      position:absolute;top:-12px;border-radius:999px;
-      background:rgba(255,255,255,.6);
-      animation:fall linear infinite;
-      opacity:.5;
-    }
-    @keyframes fall{to{transform:translate(var(--drift),110dvh)}}
-
-    .card{
-      position:relative;z-index:1;
-      width:100%;max-width:560px;
-      border-radius:22px;padding:26px;
-      background:rgba(14,22,38,.78);
-      border:1px solid rgba(31,41,55,.85);
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
-      backdrop-filter:blur(10px);
-      animation:fadeUp .6s ease forwards;
-    }
-    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1}}
-
-    .title{display:flex;gap:12px;justify-content:center;align-items:center}
-    h1{margin:0;font-size:40px;font-weight:850;letter-spacing:-1px}
-    .byline{text-align:center;color:var(--muted);font-size:13px;margin:6px 0 18px}
-
-    .server{
-      border-radius:16px;padding:16px;
-      background:rgba(0,0,0,.22);
-      border:1px solid rgba(31,41,55,.9);
-    }
-
-    .label{color:var(--muted);font-size:13px;margin-bottom:8px}
-
-    .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-
-    /* 🔥 Minecraft font ONLY here */
-    .ip{
-      font-family: "Minecraft", monospace;
-      font-size:18px;
-      letter-spacing:1px;
-      user-select:all;
-    }
-
-    .badge{
-      display:flex;gap:8px;align-items:center;
-      padding:8px 10px;border-radius:999px;
-      border:1px solid rgba(31,41,55,.9);
-      background:rgba(255,255,255,.03);
-      font-size:12.5px;color:var(--muted);
-    }
-
-    .dot{width:10px;height:10px;border-radius:50%;background:var(--warn)}
-    .dot.online{background:var(--good)}
-    .dot.offline{background:var(--bad)}
-
-    .btn{
-      margin-top:12px;width:100%;
-      padding:12px;border-radius:14px;
-      border:none;font-weight:800;
-      background:var(--btn);color:var(--btnText);
-      cursor:pointer;
-    }
-
-    .pill{
-      margin-top:12px;padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(31,41,55,.9);
-      background:rgba(255,255,255,.03);
-      font-size:13px;color:var(--muted);
-      display:flex;justify-content:space-between;flex-wrap:wrap;
-    }
-
-    .footer{text-align:center;margin-top:10px;font-size:12px;color:rgba(156,163,175,.7)}
-  </style>
-</head>
-
-<body>
-  <div class="snow" id="snow"></div>
-
-  <main class="card">
-    <div class="title">
-      <h1>Mnwab</h1>
-    </div>
-    <div class="byline">by lnvnl</div>
-
-    <section class="server">
-      <div class="label">Server Address (Java)</div>
-
-      <div class="row">
-        <div class="ip" id="serverIp">mc.lnvnl.org</div>
-        <div class="badge">
-          <span class="dot online"></span>
-          Online
-        </div>
-      </div>
-
-      <button class="btn" onclick="navigator.clipboard.writeText('mc.lnvnl.org')">
-        Join / Copy IP
-      </button>
-
-      <div class="pill">
-        <span>Server: Latest</span>
-        <span>Java Edition</span>
-      </div>
-
-      <div class="footer">Multiplayer → Add Server → paste the address</div>
-    </section>
-  </main>
-
-  <script>
-    const snow = document.getElementById("snow");
-    for(let i=0;i<70;i++){
-      const f=document.createElement("div");
-      f.className="flake";
-      f.style.width=f.style.height=(2+Math.random()*4)+"px";
-      f.style.left=Math.random()*100+"%";
-      f.style.opacity=Math.random()*.6+.3;
-      f.style.animationDuration=(10+Math.random()*10)+"s";
-      f.style.animationDelay=Math.random()*10+"s";
-      f.style.setProperty("--drift",(Math.random()*40-20)+"px");
-      snow.appendChild(f);
-    }
-  </script>
-</body>
-</html>      color:var(--text);
-      display:grid;
-      place-items:center;
-      padding:24px;
-      overflow:hidden;
-      background:
-        radial-gradient(900px 450px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
-        radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
-        var(--bg);
-    }
-
     /* ❄️ Snow */
-    .snow{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:0;
-    }
+    .snow{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .flake{
       position:absolute;
       top:-12px;
@@ -233,7 +93,6 @@
       margin-bottom: 6px;
       text-align:center;
     }
-
     .srv-icon{
       width:44px;
       height:44px;
@@ -263,12 +122,7 @@
       background: rgba(0,0,0,.22);
       border:1px solid rgba(31,41,55,.9);
     }
-
-    .label{
-      color:var(--muted);
-      font-size:13px;
-      margin-bottom:8px;
-    }
+    .label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
 
     .row{
       display:flex;
@@ -278,12 +132,13 @@
       flex-wrap:wrap;
     }
 
+    /* ✅ Pixel font ONLY for the address */
     .ip{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:800;
-      font-size:18px;
+      font-family: "Press Start 2P", system-ui, sans-serif;
+      font-size: 14px;               /* pixel fonts are big; keep it readable */
+      letter-spacing: 0.5px;
+      line-height: 1.3;
+      user-select: all;
       word-break: break-word;
     }
 
@@ -301,22 +156,13 @@
     }
 
     .dot{
-      width:10px;
-      height:10px;
-      border-radius:50%;
+      width:10px;height:10px;border-radius:50%;
       background:var(--warn);
       box-shadow:0 0 14px rgba(251,191,36,.45);
       animation: pulse 1.6s ease-in-out infinite;
     }
-    .dot.online{
-      background:var(--good);
-      box-shadow:0 0 14px rgba(52,211,153,.45);
-    }
-    .dot.offline{
-      background:var(--bad);
-      box-shadow:0 0 14px rgba(251,113,133,.45);
-      animation:none;
-    }
+    .dot.online{ background:var(--good); box-shadow:0 0 14px rgba(52,211,153,.45); }
+    .dot.offline{ background:var(--bad); box-shadow:0 0 14px rgba(251,113,133,.45); animation:none; }
     @keyframes pulse{
       0%,100%{transform:scale(1); opacity:.85}
       50%{transform:scale(1.25); opacity:1}
@@ -359,7 +205,6 @@
       gap:10px;
       flex-wrap:wrap;
     }
-
     .strong{ color: var(--text); font-weight:800; }
 
     /* Player bar */
@@ -402,7 +247,6 @@
       color: rgba(156,163,175,.85);
       min-height: 16px;
     }
-
     .footer{
       margin-top: 10px;
       text-align:center;
@@ -434,9 +278,7 @@
       <div class="label">Server Address (Java)</div>
 
       <div class="row">
-        <div class="ip">
-          <span id="serverIp">mc.lnvnl.org</span>
-        </div>
+        <div class="ip" id="serverIp">mc.lnvnl.org</div>
 
         <div class="badge" title="Live status">
           <span class="dot" id="statusDot" aria-hidden="true"></span>
@@ -466,6 +308,7 @@
 
   <script>
     const SERVER = "mc.lnvnl.org";
+
     const toast = document.getElementById("toast");
     const joinBtn = document.getElementById("joinBtn");
     const statusDot = document.getElementById("statusDot");
@@ -477,8 +320,11 @@
     const playerFill = document.getElementById("playerFill");
     const srvIcon = document.getElementById("srvIcon");
     const favicon = document.getElementById("favicon");
+    const serverIpEl = document.getElementById("serverIp");
 
     let lastUpdatedAt = null;
+
+    serverIpEl.textContent = SERVER;
 
     function showToast(msg){
       toast.textContent = msg;
@@ -551,10 +397,8 @@
 
     async function loadStatus(){
       setStatus(null);
-
       try{
         const d = await fetchJsonWithTimeout(`https://api.mcsrvstat.us/3/${SERVER}`, 6500);
-
         lastUpdatedAt = Date.now();
         setUpdatedLabel();
 
@@ -568,7 +412,6 @@
           const ver = d?.protocol?.name || d?.version || "—";
           serverVer.textContent = ver;
 
-          // Player bar
           let pct = 0;
           if (max && max > 0) pct = Math.min(100, Math.round((online / max) * 100));
           playerFill.style.width = pct + "%";
@@ -595,7 +438,7 @@
       }
     }
 
-    // Auto server icon + favicon
+    // Server icon + favicon
     function setIcon(){
       const url = `https://api.mcsrvstat.us/icon/${SERVER}`;
       srvIcon.src = url;
@@ -603,7 +446,7 @@
       favicon.href = url;
     }
 
-    // Snow (visible but still chill)
+    // Snow
     function makeSnow(){
       const container = document.getElementById("snow");
       const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -614,11 +457,11 @@
         const f = document.createElement("div");
         f.className = "flake";
 
-        const size = 2.5 + Math.random()*3.5;     // 2.5..6px
+        const size = 2.5 + Math.random()*3.5;
         const left = Math.random()*100;
-        const duration = 10 + Math.random()*10;    // 10..20s
+        const duration = 10 + Math.random()*10;
         const delay = Math.random()*10;
-        const opacity = 0.25 + Math.random()*0.55; // 0.25..0.80
+        const opacity = 0.25 + Math.random()*0.55;
         const drift = (Math.random()*40 - 20) + "px";
 
         f.style.width = size + "px";
@@ -634,10 +477,8 @@
     }
 
     // Init
-    document.getElementById("serverIp").textContent = SERVER;
     setIcon();
     makeSnow();
-
     loadStatus();
     loadLatest();
 
