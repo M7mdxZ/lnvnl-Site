@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>lnvnl</title>
+  <meta name="theme-color" content="#070a10" />
+  <title>Mnwab</title>
 
   <style>
     :root{
@@ -12,10 +13,14 @@
       --text:#e5e7eb;
       --muted:#9ca3af;
       --border:#1f2937;
+
       --btn:#e5e7eb;
       --btnText:#070a10;
+
       --good:#34d399;
       --bad:#fb7185;
+      --warn:#fbbf24;
+
       --glow:120,180,255;
     }
 
@@ -24,17 +29,17 @@
     body{
       margin:0;
       min-height:100vh;
-      min-height:100dvh;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(800px 400px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
-        radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
-        var(--bg);
+      min-height:100dvh; /* mobile-safe */
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
       display:grid;
       place-items:center;
       padding:24px;
-      color:var(--text);
       overflow:hidden;
+      background:
+        radial-gradient(900px 450px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
+        radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
+        var(--bg);
     }
 
     /* ❄️ Snow layer */
@@ -46,54 +51,59 @@
     }
     .flake{
       position:absolute;
-      top:-10px;
-      width:3px;
-      height:3px;
-      background:rgba(255,255,255,.35);
-      border-radius:50%;
-      animation: fall linear infinite;
+      top:-12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.6);
+      filter: blur(.15px);
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      will-change: transform;
+      opacity:.5;
     }
     @keyframes fall{
-      to{ transform: translateY(110dvh); }
+      to{ transform: translate(var(--drift), 110dvh); }
     }
 
     .card{
       position:relative;
       z-index:1;
       width:100%;
-      max-width:520px;
-      background:rgba(14,22,38,.75);
-      border:1px solid var(--border);
+      max-width:560px;
       border-radius:22px;
       padding:26px;
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      background: rgba(14,22,38,.78);
+      border:1px solid rgba(31,41,55,.85);
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
       backdrop-filter: blur(10px);
       animation: fadeUp .6s ease forwards;
     }
-
     @keyframes fadeUp{
       from{opacity:0; transform:translateY(14px)}
-      to{opacity:1; transform:none}
+      to{opacity:1; transform:translateY(0)}
     }
 
+    .title{
+      text-align:center;
+      margin-bottom: 18px;
+    }
     h1{
-      font-size:44px;
       margin:0;
-      font-weight:800;
-      text-align:center;
+      font-size:40px;
+      letter-spacing:-1px;
+      font-weight:850;
     }
-
-    .sub{
-      text-align:center;
+    .byline{
+      margin-top:6px;
       color:var(--muted);
-      margin:6px 0 20px;
+      font-size:13px;
     }
 
     .server{
-      background:rgba(0,0,0,.25);
-      border:1px solid var(--border);
       border-radius:16px;
       padding:16px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(31,41,55,.9);
     }
 
     .label{
@@ -114,38 +124,54 @@
       display:flex;
       align-items:center;
       gap:10px;
-      font-weight:700;
+      font-weight:800;
       font-size:18px;
+      word-break: break-word;
     }
 
     .dot{
       width:10px;
       height:10px;
       border-radius:50%;
-      background:var(--bad);
-      box-shadow:0 0 14px rgba(251,113,133,.6);
+      background:var(--warn);
+      box-shadow:0 0 14px rgba(251,191,36,.45);
+      animation: pulse 1.6s ease-in-out infinite;
     }
     .dot.online{
       background:var(--good);
-      box-shadow:0 0 14px rgba(52,211,153,.6);
+      box-shadow:0 0 14px rgba(52,211,153,.45);
+    }
+    .dot.offline{
+      background:var(--bad);
+      box-shadow:0 0 14px rgba(251,113,133,.45);
+      animation: none;
+    }
+    @keyframes pulse{
+      0%,100%{transform:scale(1); opacity:.85}
+      50%{transform:scale(1.25); opacity:1}
     }
 
     .btn{
       padding:10px 14px;
       border:none;
       border-radius:12px;
-      font-weight:700;
+      font-weight:800;
       cursor:pointer;
       background:var(--btn);
       color:var(--btnText);
+      transition: transform .15s ease, opacity .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
     }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0) scale(.98); }
 
     .pill{
       margin-top:12px;
       padding:10px 12px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      border:1px solid rgba(31,41,55,.9);
+      background: rgba(255,255,255,.03);
       font-size:13px;
       color:var(--muted);
       display:flex;
@@ -154,29 +180,29 @@
       flex-wrap:wrap;
     }
 
-    .actions{
-      margin-top:16px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:center;
-    }
+    .strong{ color: var(--text); font-weight:800; }
 
-    .linkbtn{
-      padding:10px 16px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:transparent;
-      color:var(--text);
-      text-decoration:none;
-      font-weight:700;
+    .toast{
+      margin-top: 14px;
+      text-align:center;
+      font-size:12.5px;
+      color: rgba(156,163,175,.85);
+      min-height: 16px;
     }
 
     .footer{
-      margin-top:14px;
-      font-size:12px;
-      color:var(--muted);
+      margin-top: 10px;
       text-align:center;
+      font-size:12px;
+      color: rgba(156,163,175,.7);
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .flake{ display:none; }
+      .card{ animation:none; }
+      .dot{ animation:none; }
+      .btn{ transition:none; }
     }
   </style>
 </head>
@@ -186,92 +212,189 @@
   <div class="snow" id="snow"></div>
 
   <main class="card">
-    <h1>lnvnl</h1>
-    <div class="sub">Minecraft server (Java)</div>
+    <div class="title">
+      <h1>Mnwab</h1>
+      <div class="byline">by lnvnl</div>
+    </div>
 
-    <div class="server">
-      <div class="label">Server Address</div>
+    <section class="server">
+      <div class="label">Server Address (Java)</div>
 
       <div class="row">
         <div class="ip">
-          <span class="dot" id="statusDot"></span>
+          <span class="dot" id="statusDot" aria-hidden="true"></span>
           <span id="serverIp">mc.lnvnl.org</span>
         </div>
-        <button class="btn" onclick="copyIP()">Copy</button>
+
+        <button class="btn" id="copyBtn" type="button">Copy</button>
       </div>
 
       <div class="pill">
-        <span id="statusText">Checking…</span>
+        <span>Status: <span class="strong" id="statusText">Checking…</span></span>
         <span id="playersText">Players: —/—</span>
-        <span id="serverVer">—</span>
+        <span id="serverVer">Server: —</span>
       </div>
 
       <div class="pill">
-        <span>Latest Minecraft</span>
-        <span>v <strong id="latestVer">—</strong></span>
+        <span>Latest Minecraft release</span>
+        <span>v <span class="strong" id="latestVer">Loading…</span></span>
       </div>
 
-      <div class="actions">
-        <a class="linkbtn" href="https://panel.lnvnl.org" target="_blank">Panel</a>
-      </div>
-    </div>
-
-    <div class="footer">
-      Multiplayer → Add Server → paste the address
-    </div>
+      <div class="toast" id="toast"></div>
+      <div class="footer">Multiplayer → Add Server → paste the address</div>
+    </section>
   </main>
 
   <script>
     const SERVER = "mc.lnvnl.org";
 
-    function copyIP(){
-      navigator.clipboard.writeText(SERVER);
+    // ----- Copy (mobile-friendly + fallback) -----
+    const copyBtn = document.getElementById("copyBtn");
+    const toast = document.getElementById("toast");
+
+    function showToast(msg){
+      toast.textContent = msg;
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.textContent = "", 1400);
     }
 
-    async function loadStatus(){
+    async function copyText(text){
       try{
-        const res = await fetch(`https://api.mcsrvstat.us/3/${SERVER}`, {cache:"no-store"});
-        const d = await res.json();
-        const dot = document.getElementById("statusDot");
-
-        if(d.online){
-          dot.classList.add("online");
-          document.getElementById("statusText").textContent = "Online";
-          document.getElementById("playersText").textContent =
-            `Players: ${d.players.online}/${d.players.max}`;
-          document.getElementById("serverVer").textContent =
-            `Server: ${d.protocol?.name || d.version}`;
-        }else{
-          document.getElementById("statusText").textContent = "Offline";
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
         }
-      }catch{}
+      }catch(e){}
+
+      // Fallback
+      try{
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        ta.setAttribute("readonly", "");
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      }catch(e){
+        return false;
+      }
     }
 
+    copyBtn.addEventListener("click", async () => {
+      const ok = await copyText(SERVER);
+      copyBtn.textContent = ok ? "Copied!" : "Copy failed";
+      showToast(ok ? "Copied to clipboard" : "Couldn’t copy (browser blocked it)");
+      setTimeout(() => copyBtn.textContent = "Copy", 1200);
+    });
+
+    // ----- Status helpers -----
+    function setStatus(state){
+      const dot = document.getElementById("statusDot");
+      const text = document.getElementById("statusText");
+
+      dot.classList.remove("online","offline");
+      if(state === true){
+        dot.classList.add("online");
+        text.textContent = "Online";
+      } else if(state === false){
+        dot.classList.add("offline");
+        text.textContent = "Offline";
+      } else {
+        text.textContent = "Checking…";
+      }
+    }
+
+    async function fetchJsonWithTimeout(url, ms=6000){
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), ms);
+      try{
+        const res = await fetch(url, { cache:"no-store", signal: controller.signal });
+        if(!res.ok) throw new Error("Bad response");
+        return await res.json();
+      } finally {
+        clearTimeout(t);
+      }
+    }
+
+    // ----- Live server status -----
+    async function loadStatus(){
+      setStatus(null);
+      try{
+        const d = await fetchJsonWithTimeout(`https://api.mcsrvstat.us/3/${SERVER}`, 6000);
+
+        if(d && d.online){
+          setStatus(true);
+          const online = d?.players?.online ?? 0;
+          const max = d?.players?.max ?? "—";
+          document.getElementById("playersText").textContent = `Players: ${online}/${max}`;
+
+          const ver = d?.protocol?.name || d?.version || "—";
+          document.getElementById("serverVer").textContent = `Server: ${ver}`;
+        } else {
+          setStatus(false);
+          document.getElementById("playersText").textContent = "Players: —/—";
+          document.getElementById("serverVer").textContent = "Server: —";
+        }
+      } catch {
+        // If the API is blocked on some networks, keep it clean
+        document.getElementById("statusText").textContent = "Unavailable";
+        document.getElementById("playersText").textContent = "Players: —/—";
+        document.getElementById("serverVer").textContent = "Server: —";
+      }
+    }
+
+    // ----- Latest Minecraft release -----
     async function loadLatest(){
       try{
-        const r = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json",{cache:"no-store"});
-        const j = await r.json();
-        document.getElementById("latestVer").textContent = j.latest.release;
-      }catch{
+        const j = await fetchJsonWithTimeout("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", 6000);
+        document.getElementById("latestVer").textContent = j?.latest?.release || "Latest";
+      } catch {
         document.getElementById("latestVer").textContent = "Latest";
       }
     }
 
-    /* ❄️ generate subtle snow */
-    const snow = document.getElementById("snow");
-    for(let i=0;i<40;i++){
-      const f = document.createElement("div");
-      f.className = "flake";
-      f.style.left = Math.random()*100 + "%";
-      f.style.opacity = Math.random()*0.4 + 0.1;
-      f.style.animationDuration = (Math.random()*8 + 10) + "s";
-      f.style.animationDelay = Math.random()*10 + "s";
-      snow.appendChild(f);
+    // ----- ❄️ Snow (subtle but visible) -----
+    function makeSnow(){
+      const container = document.getElementById("snow");
+      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduceMotion) return;
+
+      const count = 70; // slightly more visible
+      for(let i=0;i<count;i++){
+        const f = document.createElement("div");
+        f.className = "flake";
+
+        const size = 2.5 + Math.random()*3.5; // 2.5px to 6px
+        const left = Math.random()*100;
+        const duration = 10 + Math.random()*10; // 10s to 20s
+        const delay = Math.random()*10;
+        const opacity = 0.25 + Math.random()*0.55; // 0.25 to 0.80
+        const drift = (Math.random()*40 - 20) + "px"; // -20px..20px
+
+        f.style.width = size + "px";
+        f.style.height = size + "px";
+        f.style.left = left + "%";
+        f.style.opacity = opacity;
+        f.style.setProperty("--drift", drift);
+        f.style.animationDuration = duration + "s";
+        f.style.animationDelay = delay + "s";
+
+        container.appendChild(f);
+      }
     }
 
+    // Init
+    document.getElementById("serverIp").textContent = SERVER;
+    makeSnow();
     loadStatus();
     loadLatest();
+
+    // Refresh (API caching happens anyway)
     setInterval(loadStatus, 120000);
+    setInterval(loadLatest, 120000);
   </script>
 </body>
 </html>
