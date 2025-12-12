@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#070a10" />
   <title>Mnwab</title>
 
-  <!-- Pixel-style font (Minecraft vibe) for IP only -->
+  <!-- Pixel font (Minecraft vibe) for IP only -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -16,11 +16,12 @@
   <style>
     :root{
       --bg:#070a10;
-      --card: rgba(14,22,38,.78);
-      --card2: rgba(0,0,0,.22);
       --text:#e5e7eb;
       --muted:#9ca3af;
-      --border: rgba(31,41,55,.9);
+      --border: rgba(31,41,55,.85);
+
+      --card: rgba(14,22,38,.78);
+      --card2: rgba(0,0,0,.22);
 
       --btn:#e5e7eb;
       --btnText:#070a10;
@@ -29,11 +30,11 @@
       --bad:#fb7185;
       --warn:#fbbf24;
 
-      --glowR:120; --glowG:180; --glowB:255; /* theme glow */
+      --glow:120,180,255;
       --accent: rgba(120,180,255,.55);
       --accentSoft: rgba(120,180,255,.18);
 
-      --particle: rgba(255,255,255,.6);
+      --snow: rgba(255,255,255,.6);
     }
 
     *{ box-sizing:border-box }
@@ -50,12 +51,12 @@
       padding:24px;
       overflow:hidden;
       background:
-        radial-gradient(900px 450px at 20% 10%, rgba(var(--glowR),var(--glowG),var(--glowB),.12), transparent 60%),
+        radial-gradient(900px 450px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
         radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
         var(--bg);
     }
 
-    /* Top nav (simple) */
+    /* Top nav */
     .topbar{
       position:fixed;
       top:14px;
@@ -76,7 +77,7 @@
       border:none;
       background:transparent;
       color:rgba(229,231,235,.85);
-      font-weight:800;
+      font-weight:900;
       padding:10px 14px;
       border-radius:999px;
       cursor:pointer;
@@ -91,53 +92,25 @@
       opacity:1;
     }
 
-    /* Theme chip */
-    .chip{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(31,41,55,.75);
-      background: rgba(255,255,255,.05);
-      color: rgba(229,231,235,.85);
-      font-weight:800;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      user-select:none;
-      transition: transform .15s ease, background .2s ease;
-    }
-    .chip:active{ transform: scale(.98); }
-    .chip .dot{
-      width:10px;height:10px;border-radius:50%;
-      background: rgba(var(--glowR),var(--glowG),var(--glowB),.9);
-      box-shadow: 0 0 16px rgba(var(--glowR),var(--glowG),var(--glowB),.35);
-    }
-
-    /* Particles layer */
-    .particles{
+    /* ❄️ Snow */
+    .snow{
       position:fixed;
       inset:0;
       pointer-events:none;
       z-index:0;
     }
-    .p{
+    .flake{
       position:absolute;
       top:-12px;
       border-radius:999px;
-      background: var(--particle);
+      background: var(--snow);
       filter: blur(.15px);
-      animation-name: fall;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
+      animation: fall linear infinite;
       will-change: transform;
       opacity:.5;
     }
     @keyframes fall{
       to{ transform: translate(var(--drift), 110dvh); }
-    }
-    @keyframes driftSide{
-      50%{ transform: translateX(var(--side)) }
     }
 
     .card{
@@ -178,7 +151,7 @@
     h1{
       margin:0;
       font-size:42px;
-      font-weight:900;
+      font-weight:950;
       letter-spacing:-1px;
     }
     .byline{
@@ -254,7 +227,7 @@
       padding:12px 14px;
       border-radius:14px;
       border:none;
-      font-weight:900;
+      font-weight:950;
       background:var(--btn);
       color:var(--btnText);
       cursor:pointer;
@@ -271,7 +244,7 @@
       border:1px solid var(--border);
       background: rgba(255,255,255,.04);
       color: var(--text);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
       -webkit-tap-highlight-color: transparent;
       transition: transform .15s ease, background .2s ease;
@@ -292,7 +265,7 @@
       gap:10px;
       flex-wrap:wrap;
     }
-    .strong{ color: var(--text); font-weight:900; }
+    .strong{ color: var(--text); font-weight:950; }
 
     /* Player bar */
     .barWrap{
@@ -339,7 +312,7 @@
       font-size:13px;
       color: var(--muted);
       margin-bottom:8px;
-      font-weight:900;
+      font-weight:950;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -426,7 +399,7 @@
       border:1px solid rgba(31,41,55,.85);
       background: rgba(255,255,255,.04);
       color: var(--text);
-      font-weight:900;
+      font-weight:950;
       border-radius:12px;
       padding:8px 10px;
       cursor:pointer;
@@ -442,36 +415,31 @@
     }
     .player{
       padding:10px 10px;
-      border-radius:12px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
     }
-    .player + .player{ border-top: 1px solid rgba(31,41,55,.55); border-radius:0; }
-    .pname{ font-weight:900; }
+    .player + .player{ border-top: 1px solid rgba(31,41,55,.55); }
+    .pname{ font-weight:950; }
     .puuid{ color: rgba(156,163,175,.85); font-size:12px; }
 
     @media (prefers-reduced-motion: reduce){
-      .p{ display:none; }
+      .flake{ display:none; }
       .card{ animation:none; }
       .statusDot{ animation:none; }
-      .btn,.tab,.chip,.fill{ transition:none; }
+      .btn,.tab,.subbtn,.fill{ transition:none; }
       .modal{ animation:none; }
     }
   </style>
 </head>
 
 <body>
-  <div class="particles" id="particles"></div>
+  <div class="snow" id="snow"></div>
 
   <div class="topbar" role="navigation" aria-label="Site navigation">
     <button class="tab" id="tabHome" type="button">Home</button>
     <button class="tab" id="tabStatus" type="button">Status</button>
-    <div class="chip" id="themeChip" title="Tap to change theme">
-      <span class="dot" aria-hidden="true"></span>
-      <span id="themeLabel">Theme</span>
-    </div>
   </div>
 
   <main class="card">
@@ -512,7 +480,7 @@
         <div class="motd">
           <div class="motdTitle">
             <span>MOTD</span>
-            <span class="badge" style="padding:6px 10px;font-size:12px;" id="motdHint">Live</span>
+            <span class="badge" style="padding:6px 10px;font-size:12px;">Live</span>
           </div>
           <div class="motdText" id="motdTextHome">Loading…</div>
         </div>
@@ -535,6 +503,7 @@
       <div class="grid">
         <div class="section">
           <div class="label">Connection</div>
+
           <div class="pill">
             <span>Address: <span class="strong" id="serverIpStatus">mc.lnvnl.org</span></span>
             <span>Port: <span class="strong" id="serverPortStatus">25565</span></span>
@@ -547,7 +516,7 @@
 
           <div class="barWrap">
             <div class="barTop">
-              <span id="barLabelStatus">Load</span>
+              <span>Players</span>
               <span id="updatedTextStatus">Updated: —</span>
             </div>
             <div class="bar"><div class="fill" id="playerFillStatus"></div></div>
@@ -567,7 +536,7 @@
         </div>
 
         <div class="section">
-          <div class="label">Debug (helpful if it breaks)</div>
+          <div class="label">Debug</div>
           <div class="pill">
             <span>API: <span class="strong">mcsrvstat.us</span></span>
             <span>Cache: <span class="strong" id="apiCache">—</span></span>
@@ -638,14 +607,11 @@
     const playerList = document.getElementById("playerList");
     const modalTitle = document.getElementById("modalTitle");
 
-    const themeChip = document.getElementById("themeChip");
-    const themeLabel = document.getElementById("themeLabel");
-
     // State
     let lastUpdatedAt = null;
     let lastData = null;
 
-    // ---------- Toast (fade in/out) ----------
+    // Toast (fade in/out)
     function showToast(msg){
       toast.textContent = msg;
       toast.classList.add("show");
@@ -681,7 +647,7 @@
       setTimeout(() => copyBtn.textContent = "Join / Copy IP", 1200);
     });
 
-    // ---------- Pages / routing ----------
+    // Pages / routing
     function setActive(page){
       const isStatus = page === "status";
       pageHome.classList.toggle("active", !isStatus);
@@ -689,18 +655,16 @@
       tabHome.classList.toggle("active", !isStatus);
       tabStatus.classList.toggle("active", isStatus);
     }
-
     function route(){
       const hash = (location.hash || "").toLowerCase();
       if(hash === "#status") setActive("status");
       else setActive("home");
     }
-
     tabHome.addEventListener("click", () => { location.hash = ""; route(); });
     tabStatus.addEventListener("click", () => { location.hash = "#status"; route(); });
     window.addEventListener("hashchange", route);
 
-    // ---------- Modal (player list) ----------
+    // Modal (player list)
     function openModal(){
       modalBack.classList.add("show");
       modalBack.setAttribute("aria-hidden", "false");
@@ -712,6 +676,12 @@
     closeModal.addEventListener("click", closeModalFn);
     modalBack.addEventListener("click", (e) => { if(e.target === modalBack) closeModalFn(); });
     window.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModalFn(); });
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[s]));
+    }
 
     function renderPlayers(){
       playerList.innerHTML = "";
@@ -746,7 +716,7 @@
     playersBtnHome.addEventListener("click", () => { renderPlayers(); openModal(); });
     playersBtnStatus.addEventListener("click", () => { renderPlayers(); openModal(); });
 
-    // ---------- Fetch helpers ----------
+    // Fetch helpers
     async function fetchJsonWithTimeout(url, ms=6500){
       const controller = new AbortController();
       const t = setTimeout(() => controller.abort(), ms);
@@ -781,7 +751,6 @@
     }
 
     function formatMotd(d){
-      // prefer clean lines, fallback to raw
       const clean = d?.motd?.clean;
       if(Array.isArray(clean) && clean.length) return clean.join("\n");
       const raw = d?.motd?.raw;
@@ -790,7 +759,6 @@
     }
 
     async function loadStatus(){
-      // show "checking"
       setStatus(statusDotHome, statusTextHome, null);
       statusTextStatus.textContent = "Checking…";
 
@@ -810,7 +778,6 @@
         playersTextHome.textContent = `Players: ${on}/${max || "—"}`;
         playersTextStatus.textContent = `${on}/${max || "—"}`;
 
-        // fill bars
         let pct = 0;
         if(max && max > 0) pct = Math.min(100, Math.round((on / max) * 100));
         playerFillHome.style.width = pct + "%";
@@ -820,21 +787,17 @@
         serverVerHome.textContent = ver;
         serverVerStatus.textContent = ver;
 
-        // MOTD
         const motd = formatMotd(d);
         motdTextHome.textContent = motd;
         motdTextStatus.textContent = motd;
 
-        // Status page debug
         apiCache.textContent = d?.debug?.cachehit ? "hit" : "miss";
         apiPing.textContent = d?.debug?.ping ? "ok" : "no";
         apiQuery.textContent = d?.debug?.query ? "ok" : "no";
 
-        // Port
         serverIpStatus.textContent = SERVER;
         serverPortStatus.textContent = String(d?.port ?? 25565);
 
-        // enable/disable player list button
         const hasList = Array.isArray(d?.players?.list) && d.players.list.length > 0;
         const hint = online ? (hasList ? "Available" : "May be hidden") : "Offline";
         playersBtnHome.textContent = `View player list (${hint})`;
@@ -872,7 +835,7 @@
       }
     }
 
-    // ---------- Icon + favicon ----------
+    // Icon + favicon
     function setIcon(){
       const url = `https://api.mcsrvstat.us/icon/${SERVER}`;
       srvIcon.src = url;
@@ -882,839 +845,13 @@
       srvIcon2.onerror = () => srvIcon2.style.display = "none";
     }
 
-    // ---------- Seasonal themes + particles ----------
-    const THEMES = [
-      { key:"winter", name:"Winter", glow:[120,180,255], particle:"rgba(255,255,255,.65)", mode:"snow" },
-      { key:"spring", name:"Spring", glow:[120,255,180], particle:"rgba(180,255,220,.45)", mode:"rain" },
-      { key:"summer", name:"Summer", glow:[255,200,120], particle:"rgba(255,255,255,.28)", mode:"stars" },
-      { key:"fall",   name:"Fall",   glow:[255,170,120], particle:"rgba(255,210,170,.50)", mode:"leaves" }
-    ];
-
-    function autoThemeIndex(){
-      const m = new Date().getMonth() + 1; // 1..12
-      if([12,1,2].includes(m)) return 0;   // winter
-      if([3,4,5].includes(m)) return 1;    // spring
-      if([6,7,8].includes(m)) return 2;    // summer
-      return 3;                             // fall
-    }
-
-    function applyTheme(idx, labelSuffix="(auto)"){
-      const t = THEMES[idx];
-      document.documentElement.style.setProperty("--glowR", t.glow[0]);
-      document.documentElement.style.setProperty("--glowG", t.glow[1]);
-      document.documentElement.style.setProperty("--glowB", t.glow[2]);
-      document.documentElement.style.setProperty("--particle", t.particle);
-
-      // accent derived from glow
-      document.documentElement.style.setProperty("--accent", `rgba(${t.glow[0]},${t.glow[1]},${t.glow[2]},.55)`);
-      document.documentElement.style.setProperty("--accentSoft", `rgba(${t.glow[0]},${t.glow[1]},${t.glow[2]},.18)`);
-
-      themeLabel.textContent = `${t.name} ${labelSuffix}`;
-      buildParticles(t.mode);
-      localStorage.setItem("themeIdx", String(idx));
-      localStorage.setItem("themeAuto", labelSuffix.includes("auto") ? "1" : "0");
-    }
-
-    function buildParticles(mode){
-      const container = document.getElementById("particles");
-      container.innerHTML = "";
-
-      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if(reduceMotion) return;
-
-      // counts tuned to be visible but not crazy
-      const config = {
-        snow:  70,
-        rain:  55,
-        stars: 45,
-        leaves: 50
-      };
-      const count = config[mode] ?? 60;
-
-      for(let i=0;i<count;i++){
-        const el = document.createElement("div");
-        el.className = "p";
-
-        const left = Math.random()*100;
-
-        if(mode === "snow"){
-          const size = 2.5 + Math.random()*3.5;
-          el.style.width = size+"px";
-          el.style.height = size+"px";
-          el.style.opacity = (0.25 + Math.random()*0.55).toFixed(2);
-          el.style.borderRadius = "999px";
-          el.style.animationDuration = (10 + Math.random()*10) + "s";
-          el.style.animationDelay = (Math.random()*10) + "s";
-          el.style.setProperty("--drift", (Math.random()*40-20) + "px");
-        }
-
-        if(mode === "rain"){
-          // thin drops
-          const w = 2;
-          const h = 10 + Math.random()*14;
-          el.style.width = w+"px";
-          el.style.height = h+"px";
-          el.style.opacity = (0.15 + Math.random()*0.35).toFixed(2);
-          el.style.borderRadius = "999px";
-          el.style.animationDuration = (6 + Math.random()*5) + "s";
-          el.style.animationDelay = (Math.random()*6) + "s";
-          el.style.setProperty("--drift", (Math.random()*18-9) + "px");
-        }
-
-        if(mode === "stars"){
-          // drifting twinkles (slow)
-          const size = 1.5 + Math.random()*2.5;
-          el.style.width = size+"px";
-          el.style.height = size+"px";
-          el.style.opacity = (0.10 + Math.random()*0.25).toFixed(2);
-          el.style.borderRadius = "999px";
-          el.style.top = (Math.random()*100) + "dvh"; // not falling much
-          el.style.animationName = "driftSide";
-          el.style.animationDuration = (8 + Math.random()*10) + "s";
-          el.style.animationDelay = (Math.random()*6) + "s";
-          el.style.setProperty("--side", (Math.random()*30-15) + "px");
-        }
-
-        if(mode === "leaves"){
-          const size = 3 + Math.random()*6;
-          el.style.width = size+"px";
-          el.style.height = size+"px";
-          el.style.opacity = (0.18 + Math.random()*0.45).toFixed(2);
-          el.style.borderRadius = "6px";
-          el.style.animationDuration = (9 + Math.random()*9) + "s";
-          el.style.animationDelay = (Math.random()*8) + "s";
-          el.style.setProperty("--drift", (Math.random()*60-30) + "px");
-          // little rotate vibe via filter and random tint-ish (still subtle)
-          el.style.filter = "blur(.15px)";
-        }
-
-        el.style.left = left + "%";
-        container.appendChild(el);
-      }
-    }
-
-    // Theme init + cycle
-    let themeIdx = null;
-    const stored = localStorage.getItem("themeIdx");
-    const storedAuto = localStorage.getItem("themeAuto");
-
-    if(stored !== null && storedAuto === "0"){
-      themeIdx = Math.max(0, Math.min(THEMES.length-1, parseInt(stored,10)));
-      applyTheme(themeIdx, "(manual)");
-    } else {
-      themeIdx = autoThemeIndex();
-      applyTheme(themeIdx, "(auto)");
-    }
-
-    themeChip.addEventListener("click", () => {
-      themeIdx = (themeIdx + 1) % THEMES.length;
-      applyTheme(themeIdx, "(manual)");
-      showToast("Theme changed");
-    });
-
-    // ---------- small helpers ----------
-    function escapeHtml(str){
-      return String(str).replace(/[&<>"']/g, s => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-      }[s]));
-    }
-
-    // ---------- Init ----------
-    route();
-    setIcon();
-    loadStatus();
-    loadLatest();
-    setInterval(loadStatus, 120000);
-    setInterval(loadLatest, 120000);
-    setInterval(() => {
-      setUpdatedLabel(updatedTextHome);
-      setUpdatedLabel(updatedTextStatus);
-    }, 1000);
-  </script>
-</body>
-</html>      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text);
-      display:grid;
-      place-items:center;
-      padding:24px;
-      overflow:hidden;
-      background:
-        radial-gradient(900px 450px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
-        radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
-        var(--bg);
-    }
-
-    /* ❄️ Snow */
-    .snow{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:0;
-    }
-    .flake{
-      position:absolute;
-      top:-12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.6);
-      filter:blur(.15px);
-      animation:fall linear infinite;
-      opacity:.5;
-    }
-    @keyframes fall{
-      to{ transform:translate(var(--drift),110dvh); }
-    }
-
-    .card{
-      position:relative;
-      z-index:1;
-      width:100%;
-      max-width:560px;
-      border-radius:22px;
-      padding:26px;
-      background:rgba(14,22,38,.78);
-      border:1px solid rgba(31,41,55,.85);
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
-      backdrop-filter:blur(10px);
-      animation:fadeUp .6s ease forwards;
-    }
-    @keyframes fadeUp{
-      from{opacity:0; transform:translateY(14px)}
-      to{opacity:1; transform:none}
-    }
-
-    .title{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:12px;
-      margin-bottom:6px;
-      text-align:center;
-    }
-    h1{
-      margin:0;
-      font-size:40px;
-      font-weight:850;
-      letter-spacing:-1px;
-    }
-    .byline{
-      text-align:center;
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:18px;
-    }
-
-    .server{
-      border-radius:16px;
-      padding:16px;
-      background:rgba(0,0,0,.22);
-      border:1px solid rgba(31,41,55,.9);
-    }
-
-    .label{
-      color:var(--muted);
-      font-size:13px;
-      margin-bottom:8px;
-    }
-
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    /* 🎮 Minecraft-style font ONLY for IP */
-    .ip{
-      font-family:"Press Start 2P", monospace;
-      font-size:14px;
-      letter-spacing:.5px;
-      line-height:1.4;
-      user-select:all;
-      word-break:break-word;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(31,41,55,.9);
-      background:rgba(255,255,255,.03);
-      font-size:12.5px;
-      color:var(--muted);
-      white-space:nowrap;
-    }
-
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background:var(--warn);
-      box-shadow:0 0 14px rgba(251,191,36,.45);
-      animation:pulse 1.6s ease-in-out infinite;
-    }
-    .dot.online{
-      background:var(--good);
-      box-shadow:0 0 14px rgba(52,211,153,.45);
-    }
-    .dot.offline{
-      background:var(--bad);
-      box-shadow:0 0 14px rgba(251,113,133,.45);
-      animation:none;
-    }
-    @keyframes pulse{
-      0%,100%{transform:scale(1); opacity:.85}
-      50%{transform:scale(1.25); opacity:1}
-    }
-
-    .btn{
-      width:100%;
-      margin-top:12px;
-      padding:12px;
-      border-radius:14px;
-      border:none;
-      font-weight:800;
-      background:var(--btn);
-      color:var(--btnText);
-      cursor:pointer;
-      transition:transform .15s ease;
-    }
-    .btn:active{ transform:scale(.97); }
-
-    .pill{
-      margin-top:12px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(31,41,55,.9);
-      background:rgba(255,255,255,.03);
-      font-size:13px;
-      color:var(--muted);
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .toast{
-      margin-top:12px;
-      text-align:center;
-      font-size:12.5px;
-      color:rgba(156,163,175,.85);
-      opacity:0;
-      transition:opacity .25s ease;
-      min-height:16px;
-    }
-    .toast.show{ opacity:1; }
-
-    .footer{
-      margin-top:10px;
-      text-align:center;
-      font-size:12px;
-      color:rgba(156,163,175,.7);
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .flake{display:none}
-      .card,.dot,.btn{animation:none;transition:none}
-    }
-  </style>
-</head>
-
-<body>
-  <div class="snow" id="snow"></div>
-
-  <main class="card">
-    <div class="title">
-      <h1>Mnwab</h1>
-    </div>
-    <div class="byline">by lnvnl</div>
-
-    <section class="server">
-      <div class="label">Server Address (Java)</div>
-
-      <div class="row">
-        <div class="ip" id="serverIp">mc.lnvnl.org</div>
-        <div class="badge">
-          <span class="dot online" id="statusDot"></span>
-          <span id="statusText">Online</span>
-        </div>
-      </div>
-
-      <button class="btn" id="joinBtn">Join / Copy IP</button>
-
-      <div class="pill">
-        <span>Server: Latest</span>
-        <span>Java Edition</span>
-      </div>
-
-      <div class="toast" id="toast"></div>
-      <div class="footer">Multiplayer → Add Server → paste the address</div>
-    </section>
-  </main>
-
-  <script>
-    const SERVER = "mc.lnvnl.org";
-    const joinBtn = document.getElementById("joinBtn");
-    const toast = document.getElementById("toast");
-
-    function showToast(msg){
-      toast.textContent = msg;
-      toast.classList.add("show");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 900);
-    }
-
-    async function copyIP(){
-      try{
-        await navigator.clipboard.writeText(SERVER);
-        joinBtn.textContent = "Copied ✓";
-        showToast("Copied to clipboard");
-      }catch{
-        joinBtn.textContent = "Copy failed";
-        showToast("Copy blocked");
-      }
-      setTimeout(()=>joinBtn.textContent="Join / Copy IP",1200);
-    }
-
-    joinBtn.onclick = copyIP;
-
     // Snow generation
-    const snow = document.getElementById("snow");
-    for(let i=0;i<70;i++){
-      const f=document.createElement("div");
-      f.className="flake";
-      const s=2.5+Math.random()*3.5;
-      f.style.width=f.style.height=s+"px";
-      f.style.left=Math.random()*100+"%";
-      f.style.opacity=Math.random()*.6+.3;
-      f.style.animationDuration=(10+Math.random()*10)+"s";
-      f.style.animationDelay=Math.random()*10+"s";
-      f.style.setProperty("--drift",(Math.random()*40-20)+"px");
-      snow.appendChild(f);
-    }
-  </script>
-</body>
-</html>      margin:0;
-      min-height:100vh;
-      min-height:100dvh; /* mobile-safe */
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--text);
-      display:grid;
-      place-items:center;
-      padding:24px;
-      overflow:hidden;
-      background:
-        radial-gradient(900px 450px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
-        radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
-        var(--bg);
-    }
-
-    /* ❄️ Snow */
-    .snow{ position:fixed; inset:0; pointer-events:none; z-index:0; }
-    .flake{
-      position:absolute;
-      top:-12px;
-      border-radius:999px;
-      background: rgba(255,255,255,.6);
-      filter: blur(.15px);
-      animation-name: fall;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      will-change: transform;
-      opacity:.5;
-    }
-    @keyframes fall{
-      to{ transform: translate(var(--drift), 110dvh); }
-    }
-
-    .card{
-      position:relative;
-      z-index:1;
-      width:100%;
-      max-width:560px;
-      border-radius:22px;
-      padding:26px;
-      background: rgba(14,22,38,.78);
-      border:1px solid rgba(31,41,55,.85);
-      box-shadow: 0 20px 60px rgba(0,0,0,.6);
-      backdrop-filter: blur(10px);
-      animation: fadeUp .6s ease forwards;
-    }
-    @keyframes fadeUp{
-      from{opacity:0; transform:translateY(14px)}
-      to{opacity:1; transform:translateY(0)}
-    }
-
-    .title{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:12px;
-      margin-bottom: 6px;
-      text-align:center;
-    }
-    .srv-icon{
-      width:44px;
-      height:44px;
-      border-radius:14px;
-      background: rgba(0,0,0,.25);
-      border:1px solid rgba(31,41,55,.9);
-      box-shadow: 0 12px 30px rgba(0,0,0,.4);
-      object-fit: cover;
-    }
-
-    h1{
-      margin:0;
-      font-size:40px;
-      letter-spacing:-1px;
-      font-weight:850;
-    }
-    .byline{
-      margin: 6px 0 18px;
-      color:var(--muted);
-      font-size:13px;
-      text-align:center;
-    }
-
-    .server{
-      border-radius:16px;
-      padding:16px;
-      background: rgba(0,0,0,.22);
-      border:1px solid rgba(31,41,55,.9);
-    }
-    .label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
-
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    /* ✅ Pixel font ONLY for the address */
-    .ip{
-      font-family: "Press Start 2P", system-ui, sans-serif;
-      font-size: 14px;               /* pixel fonts are big; keep it readable */
-      letter-spacing: 0.5px;
-      line-height: 1.3;
-      user-select: all;
-      word-break: break-word;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(31,41,55,.9);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      font-size: 12.5px;
-      white-space: nowrap;
-    }
-
-    .dot{
-      width:10px;height:10px;border-radius:50%;
-      background:var(--warn);
-      box-shadow:0 0 14px rgba(251,191,36,.45);
-      animation: pulse 1.6s ease-in-out infinite;
-    }
-    .dot.online{ background:var(--good); box-shadow:0 0 14px rgba(52,211,153,.45); }
-    .dot.offline{ background:var(--bad); box-shadow:0 0 14px rgba(251,113,133,.45); animation:none; }
-    @keyframes pulse{
-      0%,100%{transform:scale(1); opacity:.85}
-      50%{transform:scale(1.25); opacity:1}
-    }
-
-    .btn{
-      padding:10px 14px;
-      border:none;
-      border-radius:12px;
-      font-weight:800;
-      cursor:pointer;
-      background:var(--btn);
-      color:var(--btnText);
-      transition: transform .15s ease, opacity .15s ease;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn:hover{ transform: translateY(-1px); }
-    .btn:active{ transform: translateY(0) scale(.98); }
-
-    .btn.big{
-      width:100%;
-      margin-top:12px;
-      padding:12px 14px;
-      border-radius:14px;
-      font-size:15px;
-      letter-spacing:.2px;
-    }
-
-    .pill{
-      margin-top:12px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(31,41,55,.9);
-      background: rgba(255,255,255,.03);
-      font-size:13px;
-      color:var(--muted);
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .strong{ color: var(--text); font-weight:800; }
-
-    /* Player bar */
-    .bar-wrap{
-      margin-top:12px;
-      border-radius:14px;
-      border:1px solid rgba(31,41,55,.9);
-      background: rgba(255,255,255,.03);
-      padding:10px 12px;
-    }
-    .bar-top{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      font-size:13px;
-      color: var(--muted);
-      margin-bottom:8px;
-    }
-    .bar{
-      height:10px;
-      border-radius:999px;
-      background: rgba(255,255,255,.06);
-      overflow:hidden;
-      border:1px solid rgba(31,41,55,.65);
-    }
-    .fill{
-      height:100%;
-      width:0%;
-      border-radius:999px;
-      background: rgba(var(--glow), .55);
-      box-shadow: 0 0 18px rgba(var(--glow), .18);
-      transition: width .35s ease;
-    }
-
-    .toast{
-      margin-top: 12px;
-      text-align:center;
-      font-size:12.5px;
-      color: rgba(156,163,175,.85);
-      min-height: 16px;
-    }
-    .footer{
-      margin-top: 10px;
-      text-align:center;
-      font-size:12px;
-      color: rgba(156,163,175,.7);
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .flake{ display:none; }
-      .card{ animation:none; }
-      .dot{ animation:none; }
-      .btn{ transition:none; }
-      .fill{ transition:none; }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="snow" id="snow"></div>
-
-  <main class="card">
-    <div class="title">
-      <img class="srv-icon" id="srvIcon" alt="Server icon" />
-      <h1>Mnwab</h1>
-    </div>
-    <div class="byline">by lnvnl</div>
-
-    <section class="server">
-      <div class="label">Server Address (Java)</div>
-
-      <div class="row">
-        <div class="ip" id="serverIp">mc.lnvnl.org</div>
-
-        <div class="badge" title="Live status">
-          <span class="dot" id="statusDot" aria-hidden="true"></span>
-          <span id="statusText">Checking…</span>
-        </div>
-      </div>
-
-      <button class="btn big" id="joinBtn" type="button">Join / Copy IP</button>
-
-      <div class="bar-wrap">
-        <div class="bar-top">
-          <span id="playersText">Players: —/—</span>
-          <span id="updatedText">Updated: —</span>
-        </div>
-        <div class="bar"><div class="fill" id="playerFill"></div></div>
-      </div>
-
-      <div class="pill">
-        <span>Server: <span class="strong" id="serverVer">—</span></span>
-        <span>Latest MC: <span class="strong" id="latestVer">Loading…</span></span>
-      </div>
-
-      <div class="toast" id="toast"></div>
-      <div class="footer">Multiplayer → Add Server → paste the address</div>
-    </section>
-  </main>
-
-  <script>
-    const SERVER = "mc.lnvnl.org";
-
-    const toast = document.getElementById("toast");
-    const joinBtn = document.getElementById("joinBtn");
-    const statusDot = document.getElementById("statusDot");
-    const statusText = document.getElementById("statusText");
-    const playersText = document.getElementById("playersText");
-    const serverVer = document.getElementById("serverVer");
-    const latestVer = document.getElementById("latestVer");
-    const updatedText = document.getElementById("updatedText");
-    const playerFill = document.getElementById("playerFill");
-    const srvIcon = document.getElementById("srvIcon");
-    const favicon = document.getElementById("favicon");
-    const serverIpEl = document.getElementById("serverIp");
-
-    let lastUpdatedAt = null;
-
-    serverIpEl.textContent = SERVER;
-
-    function showToast(msg){
-      toast.textContent = msg;
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(() => toast.textContent = "", 1400);
-    }
-
-    async function copyText(text){
-      try{
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(text);
-          return true;
-        }
-      }catch(e){}
-      try{
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
-        ta.setAttribute("readonly", "");
-        document.body.appendChild(ta);
-        ta.select();
-        const ok = document.execCommand("copy");
-        document.body.removeChild(ta);
-        return ok;
-      }catch(e){
-        return false;
-      }
-    }
-
-    joinBtn.addEventListener("click", async () => {
-      const ok = await copyText(SERVER);
-      joinBtn.textContent = ok ? "Copied ✓" : "Copy failed";
-      showToast(ok ? "Copied to clipboard" : "Browser blocked copying");
-      setTimeout(() => joinBtn.textContent = "Join / Copy IP", 1200);
-    });
-
-    function setStatus(state){
-      statusDot.classList.remove("online","offline");
-      if(state === true){
-        statusDot.classList.add("online");
-        statusText.textContent = "Online";
-      } else if(state === false){
-        statusDot.classList.add("offline");
-        statusText.textContent = "Offline";
-      } else {
-        statusText.textContent = "Checking…";
-      }
-    }
-
-    function setUpdatedLabel(){
-      if(!lastUpdatedAt){ updatedText.textContent = "Updated: —"; return; }
-      const s = Math.max(0, Math.floor((Date.now() - lastUpdatedAt) / 1000));
-      if(s < 10) updatedText.textContent = "Updated: just now";
-      else if(s < 60) updatedText.textContent = `Updated: ${s}s ago`;
-      else updatedText.textContent = `Updated: ${Math.floor(s/60)}m ago`;
-    }
-
-    async function fetchJsonWithTimeout(url, ms=6500){
-      const controller = new AbortController();
-      const t = setTimeout(() => controller.abort(), ms);
-      try{
-        const res = await fetch(url, { cache:"no-store", signal: controller.signal });
-        if(!res.ok) throw new Error("Bad response");
-        return await res.json();
-      } finally {
-        clearTimeout(t);
-      }
-    }
-
-    async function loadStatus(){
-      setStatus(null);
-      try{
-        const d = await fetchJsonWithTimeout(`https://api.mcsrvstat.us/3/${SERVER}`, 6500);
-        lastUpdatedAt = Date.now();
-        setUpdatedLabel();
-
-        if(d && d.online){
-          setStatus(true);
-
-          const online = d?.players?.online ?? 0;
-          const max = d?.players?.max ?? 0;
-          playersText.textContent = `Players: ${online}/${max || "—"}`;
-
-          const ver = d?.protocol?.name || d?.version || "—";
-          serverVer.textContent = ver;
-
-          let pct = 0;
-          if (max && max > 0) pct = Math.min(100, Math.round((online / max) * 100));
-          playerFill.style.width = pct + "%";
-        } else {
-          setStatus(false);
-          playersText.textContent = "Players: —/—";
-          serverVer.textContent = "—";
-          playerFill.style.width = "0%";
-        }
-      } catch {
-        statusText.textContent = "Unavailable";
-        playersText.textContent = "Players: —/—";
-        serverVer.textContent = "—";
-        playerFill.style.width = "0%";
-      }
-    }
-
-    async function loadLatest(){
-      try{
-        const j = await fetchJsonWithTimeout("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", 6500);
-        latestVer.textContent = j?.latest?.release || "Latest";
-      } catch {
-        latestVer.textContent = "Latest";
-      }
-    }
-
-    // Server icon + favicon
-    function setIcon(){
-      const url = `https://api.mcsrvstat.us/icon/${SERVER}`;
-      srvIcon.src = url;
-      srvIcon.onerror = () => { srvIcon.style.display = "none"; };
-      favicon.href = url;
-    }
-
-    // Snow
     function makeSnow(){
       const container = document.getElementById("snow");
       const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduceMotion) return;
+      if(reduceMotion) return;
 
-      const count = 70;
+      const count = 70; // visible but not insane
       for(let i=0;i<count;i++){
         const f = document.createElement("div");
         f.className = "flake";
@@ -1739,6 +876,7 @@
     }
 
     // Init
+    route();
     setIcon();
     makeSnow();
     loadStatus();
@@ -1746,7 +884,11 @@
 
     setInterval(loadStatus, 120000);
     setInterval(loadLatest, 120000);
-    setInterval(setUpdatedLabel, 1000);
+    setInterval(() => {
+      setUpdatedLabel(updatedTextHome);
+      setUpdatedLabel(updatedTextStatus);
+    }, 1000);
   </script>
 </body>
 </html>
+```0
