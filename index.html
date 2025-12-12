@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#070a10" />
   <title>Mnwab</title>
 
-  <!-- Pixel-style font (Minecraft vibe) -->
+  <!-- Pixel-style font (Minecraft vibe) for IP only -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -16,25 +16,1023 @@
   <style>
     :root{
       --bg:#070a10;
-      --card:#0e1626;
+      --card: rgba(14,22,38,.78);
+      --card2: rgba(0,0,0,.22);
       --text:#e5e7eb;
       --muted:#9ca3af;
-      --border:#1f2937;
+      --border: rgba(31,41,55,.9);
+
       --btn:#e5e7eb;
       --btnText:#070a10;
+
       --good:#34d399;
       --bad:#fb7185;
       --warn:#fbbf24;
-      --glow:120,180,255;
+
+      --glowR:120; --glowG:180; --glowB:255; /* theme glow */
+      --accent: rgba(120,180,255,.55);
+      --accentSoft: rgba(120,180,255,.18);
+
+      --particle: rgba(255,255,255,.6);
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box }
+    html, body{ height:100% }
 
     body{
       margin:0;
       min-height:100vh;
       min-height:100dvh;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      display:grid;
+      place-items:center;
+      padding:24px;
+      overflow:hidden;
+      background:
+        radial-gradient(900px 450px at 20% 10%, rgba(var(--glowR),var(--glowG),var(--glowB),.12), transparent 60%),
+        radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
+        var(--bg);
+    }
+
+    /* Top nav (simple) */
+    .topbar{
+      position:fixed;
+      top:14px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:3;
+      display:flex;
+      gap:10px;
+      padding:8px;
+      border-radius:999px;
+      border:1px solid rgba(31,41,55,.75);
+      background: rgba(10,14,22,.55);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+    }
+    .tab{
+      appearance:none;
+      border:none;
+      background:transparent;
+      color:rgba(229,231,235,.85);
+      font-weight:800;
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      transition: background .2s ease, transform .15s ease, opacity .2s ease;
+      -webkit-tap-highlight-color: transparent;
+      opacity:.9;
+    }
+    .tab:hover{ background: rgba(255,255,255,.06); }
+    .tab:active{ transform: scale(.98); }
+    .tab.active{
+      background: rgba(255,255,255,.10);
+      opacity:1;
+    }
+
+    /* Theme chip */
+    .chip{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(31,41,55,.75);
+      background: rgba(255,255,255,.05);
+      color: rgba(229,231,235,.85);
+      font-weight:800;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .chip:active{ transform: scale(.98); }
+    .chip .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: rgba(var(--glowR),var(--glowG),var(--glowB),.9);
+      box-shadow: 0 0 16px rgba(var(--glowR),var(--glowG),var(--glowB),.35);
+    }
+
+    /* Particles layer */
+    .particles{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+    .p{
+      position:absolute;
+      top:-12px;
+      border-radius:999px;
+      background: var(--particle);
+      filter: blur(.15px);
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      will-change: transform;
+      opacity:.5;
+    }
+    @keyframes fall{
+      to{ transform: translate(var(--drift), 110dvh); }
+    }
+    @keyframes driftSide{
+      50%{ transform: translateX(var(--side)) }
+    }
+
+    .card{
+      position:relative;
+      z-index:1;
+      width:100%;
+      max-width:620px;
+      border-radius:22px;
+      padding:26px;
+      background: var(--card);
+      border:1px solid rgba(31,41,55,.85);
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      backdrop-filter: blur(10px);
+      animation: fadeUp .6s ease forwards;
+    }
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(14px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    .title{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin-bottom: 6px;
+      text-align:center;
+    }
+    .srv-icon{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(31,41,55,.9);
+      box-shadow: 0 12px 30px rgba(0,0,0,.4);
+      object-fit: cover;
+    }
+    h1{
+      margin:0;
+      font-size:42px;
+      font-weight:900;
+      letter-spacing:-1px;
+    }
+    .byline{
+      margin: 6px 0 18px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .section{
+      border-radius:16px;
+      padding:16px;
+      background: var(--card2);
+      border:1px solid var(--border);
+    }
+
+    .label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    /* Minecraft-ish font ONLY for address */
+    .ip{
+      font-family:"Press Start 2P", monospace;
+      font-size:14px;
+      letter-spacing:.5px;
+      line-height:1.4;
+      user-select:all;
+      word-break:break-word;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      font-size:12.5px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .statusDot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--warn);
+      box-shadow:0 0 14px rgba(251,191,36,.45);
+      animation:pulse 1.6s ease-in-out infinite;
+    }
+    .statusDot.online{
+      background:var(--good);
+      box-shadow:0 0 14px rgba(52,211,153,.45);
+    }
+    .statusDot.offline{
+      background:var(--bad);
+      box-shadow:0 0 14px rgba(251,113,133,.45);
+      animation:none;
+    }
+    @keyframes pulse{
+      0%,100%{transform:scale(1); opacity:.85}
+      50%{transform:scale(1.25); opacity:1}
+    }
+
+    .btn{
+      width:100%;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:none;
+      font-weight:900;
+      background:var(--btn);
+      color:var(--btnText);
+      cursor:pointer;
+      transition: transform .15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{ transform: scale(.97); }
+
+    .subbtn{
+      width:100%;
+      margin-top:10px;
+      padding:10px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-weight:900;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .subbtn:hover{ background: rgba(255,255,255,.06); }
+    .subbtn:active{ transform: scale(.98); }
+
+    .pill{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .strong{ color: var(--text); font-weight:900; }
+
+    /* Player bar */
+    .barWrap{
+      margin-top:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      padding:10px 12px;
+    }
+    .barTop{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color: var(--muted);
+      margin-bottom:8px;
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      border:1px solid rgba(31,41,55,.65);
+    }
+    .fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 18px var(--accentSoft);
+      transition: width .35s ease;
+    }
+
+    /* MOTD */
+    .motd{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+    }
+    .motdTitle{
+      font-size:13px;
+      color: var(--muted);
+      margin-bottom:8px;
+      font-weight:900;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .motdText{
+      color: rgba(229,231,235,.92);
+      font-size:14px;
+      line-height:1.45;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    /* Toast (fade in/out) */
+    .toast{
+      margin-top:12px;
+      text-align:center;
+      font-size:12.5px;
+      color:rgba(156,163,175,.85);
+      opacity:0;
+      transition:opacity .25s ease;
+      min-height:16px;
+    }
+    .toast.show{ opacity:1; }
+
+    .footer{
+      margin-top: 10px;
+      text-align:center;
+      font-size:12px;
+      color: rgba(156,163,175,.7);
+    }
+
+    /* Pages */
+    .page{ display:none; }
+    .page.active{ display:block; }
+
+    /* Status page grid */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    /* Modal */
+    .modalBack{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      z-index:5;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      backdrop-filter: blur(6px);
+    }
+    .modalBack.show{ display:flex; }
+    .modal{
+      width:100%;
+      max-width:520px;
+      border-radius:18px;
+      border:1px solid rgba(31,41,55,.85);
+      background: rgba(14,22,38,.92);
+      box-shadow: 0 20px 70px rgba(0,0,0,.65);
+      padding:16px;
+      animation: pop .18s ease forwards;
+    }
+    @keyframes pop{
+      from{opacity:0; transform: translateY(10px) scale(.98)}
+      to{opacity:1; transform:none}
+    }
+    .modalTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .modalTitle{
+      font-weight:1000;
+      letter-spacing:-.2px;
+    }
+    .closeBtn{
+      border:1px solid rgba(31,41,55,.85);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-weight:900;
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .list{
+      border-radius:14px;
+      border:1px solid rgba(31,41,55,.8);
+      background: rgba(255,255,255,.03);
+      padding:10px;
+      max-height: 45vh;
+      overflow:auto;
+    }
+    .player{
+      padding:10px 10px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .player + .player{ border-top: 1px solid rgba(31,41,55,.55); border-radius:0; }
+    .pname{ font-weight:900; }
+    .puuid{ color: rgba(156,163,175,.85); font-size:12px; }
+
+    @media (prefers-reduced-motion: reduce){
+      .p{ display:none; }
+      .card{ animation:none; }
+      .statusDot{ animation:none; }
+      .btn,.tab,.chip,.fill{ transition:none; }
+      .modal{ animation:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="particles" id="particles"></div>
+
+  <div class="topbar" role="navigation" aria-label="Site navigation">
+    <button class="tab" id="tabHome" type="button">Home</button>
+    <button class="tab" id="tabStatus" type="button">Status</button>
+    <div class="chip" id="themeChip" title="Tap to change theme">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="themeLabel">Theme</span>
+    </div>
+  </div>
+
+  <main class="card">
+    <!-- HOME -->
+    <section class="page" id="pageHome">
+      <div class="title">
+        <img class="srv-icon" id="srvIcon" alt="Server icon" />
+        <h1>Mnwab</h1>
+      </div>
+      <div class="byline">by lnvnl</div>
+
+      <div class="section">
+        <div class="label">Server Address (Java)</div>
+
+        <div class="row">
+          <div class="ip" id="serverIp">mc.lnvnl.org</div>
+          <div class="badge" title="Live status">
+            <span class="statusDot" id="statusDotHome" aria-hidden="true"></span>
+            <span id="statusTextHome">Checking…</span>
+          </div>
+        </div>
+
+        <button class="btn" id="copyBtn" type="button">Join / Copy IP</button>
+
+        <div class="barWrap">
+          <div class="barTop">
+            <span id="playersTextHome">Players: —/—</span>
+            <span id="updatedTextHome">Updated: —</span>
+          </div>
+          <div class="bar"><div class="fill" id="playerFillHome"></div></div>
+        </div>
+
+        <div class="pill">
+          <span>Server: <span class="strong" id="serverVerHome">—</span></span>
+          <span>Latest MC: <span class="strong" id="latestVerHome">Loading…</span></span>
+        </div>
+
+        <div class="motd">
+          <div class="motdTitle">
+            <span>MOTD</span>
+            <span class="badge" style="padding:6px 10px;font-size:12px;" id="motdHint">Live</span>
+          </div>
+          <div class="motdText" id="motdTextHome">Loading…</div>
+        </div>
+
+        <button class="subbtn" id="playersBtnHome" type="button">View player list</button>
+
+        <div class="toast" id="toast"></div>
+        <div class="footer">Multiplayer → Add Server → paste the address</div>
+      </div>
+    </section>
+
+    <!-- STATUS -->
+    <section class="page" id="pageStatus">
+      <div class="title">
+        <img class="srv-icon" id="srvIcon2" alt="Server icon" />
+        <h1>Status</h1>
+      </div>
+      <div class="byline">lnvnl.org/#status</div>
+
+      <div class="grid">
+        <div class="section">
+          <div class="label">Connection</div>
+          <div class="pill">
+            <span>Address: <span class="strong" id="serverIpStatus">mc.lnvnl.org</span></span>
+            <span>Port: <span class="strong" id="serverPortStatus">25565</span></span>
+          </div>
+
+          <div class="pill">
+            <span>Status: <span class="strong" id="statusTextStatus">Checking…</span></span>
+            <span>Players: <span class="strong" id="playersTextStatus">—/—</span></span>
+          </div>
+
+          <div class="barWrap">
+            <div class="barTop">
+              <span id="barLabelStatus">Load</span>
+              <span id="updatedTextStatus">Updated: —</span>
+            </div>
+            <div class="bar"><div class="fill" id="playerFillStatus"></div></div>
+          </div>
+
+          <div class="pill">
+            <span>Server version: <span class="strong" id="serverVerStatus">—</span></span>
+            <span>Latest MC: <span class="strong" id="latestVerStatus">—</span></span>
+          </div>
+
+          <button class="subbtn" id="playersBtnStatus" type="button">View player list</button>
+        </div>
+
+        <div class="section">
+          <div class="label">MOTD</div>
+          <div class="motdText" id="motdTextStatus">Loading…</div>
+        </div>
+
+        <div class="section">
+          <div class="label">Debug (helpful if it breaks)</div>
+          <div class="pill">
+            <span>API: <span class="strong">mcsrvstat.us</span></span>
+            <span>Cache: <span class="strong" id="apiCache">—</span></span>
+          </div>
+          <div class="pill">
+            <span>Ping: <span class="strong" id="apiPing">—</span></span>
+            <span>Query: <span class="strong" id="apiQuery">—</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Player list modal -->
+  <div class="modalBack" id="modalBack" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Player list">
+      <div class="modalTop">
+        <div class="modalTitle" id="modalTitle">Players</div>
+        <button class="closeBtn" id="closeModal" type="button">Close</button>
+      </div>
+      <div class="list" id="playerList"></div>
+    </div>
+  </div>
+
+  <script>
+    const SERVER = "mc.lnvnl.org";
+
+    // Elements
+    const favicon = document.getElementById("favicon");
+    const srvIcon = document.getElementById("srvIcon");
+    const srvIcon2 = document.getElementById("srvIcon2");
+
+    const tabHome = document.getElementById("tabHome");
+    const tabStatus = document.getElementById("tabStatus");
+    const pageHome = document.getElementById("pageHome");
+    const pageStatus = document.getElementById("pageStatus");
+
+    const toast = document.getElementById("toast");
+    const copyBtn = document.getElementById("copyBtn");
+
+    const statusDotHome = document.getElementById("statusDotHome");
+    const statusTextHome = document.getElementById("statusTextHome");
+    const playersTextHome = document.getElementById("playersTextHome");
+    const updatedTextHome = document.getElementById("updatedTextHome");
+    const playerFillHome = document.getElementById("playerFillHome");
+    const serverVerHome = document.getElementById("serverVerHome");
+    const latestVerHome = document.getElementById("latestVerHome");
+    const motdTextHome = document.getElementById("motdTextHome");
+
+    const serverIpStatus = document.getElementById("serverIpStatus");
+    const serverPortStatus = document.getElementById("serverPortStatus");
+    const statusTextStatus = document.getElementById("statusTextStatus");
+    const playersTextStatus = document.getElementById("playersTextStatus");
+    const updatedTextStatus = document.getElementById("updatedTextStatus");
+    const playerFillStatus = document.getElementById("playerFillStatus");
+    const serverVerStatus = document.getElementById("serverVerStatus");
+    const latestVerStatus = document.getElementById("latestVerStatus");
+    const motdTextStatus = document.getElementById("motdTextStatus");
+    const apiCache = document.getElementById("apiCache");
+    const apiPing = document.getElementById("apiPing");
+    const apiQuery = document.getElementById("apiQuery");
+
+    const playersBtnHome = document.getElementById("playersBtnHome");
+    const playersBtnStatus = document.getElementById("playersBtnStatus");
+
+    const modalBack = document.getElementById("modalBack");
+    const closeModal = document.getElementById("closeModal");
+    const playerList = document.getElementById("playerList");
+    const modalTitle = document.getElementById("modalTitle");
+
+    const themeChip = document.getElementById("themeChip");
+    const themeLabel = document.getElementById("themeLabel");
+
+    // State
+    let lastUpdatedAt = null;
+    let lastData = null;
+
+    // ---------- Toast (fade in/out) ----------
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 900);
+    }
+
+    async function copyText(text){
+      try{
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      }catch(e){}
+      try{
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        ta.setAttribute("readonly", "");
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      }catch(e){ return false; }
+    }
+
+    copyBtn.addEventListener("click", async () => {
+      const ok = await copyText(SERVER);
+      copyBtn.textContent = ok ? "Copied ✓" : "Copy failed";
+      showToast(ok ? "Copied to clipboard" : "Copy blocked");
+      setTimeout(() => copyBtn.textContent = "Join / Copy IP", 1200);
+    });
+
+    // ---------- Pages / routing ----------
+    function setActive(page){
+      const isStatus = page === "status";
+      pageHome.classList.toggle("active", !isStatus);
+      pageStatus.classList.toggle("active", isStatus);
+      tabHome.classList.toggle("active", !isStatus);
+      tabStatus.classList.toggle("active", isStatus);
+    }
+
+    function route(){
+      const hash = (location.hash || "").toLowerCase();
+      if(hash === "#status") setActive("status");
+      else setActive("home");
+    }
+
+    tabHome.addEventListener("click", () => { location.hash = ""; route(); });
+    tabStatus.addEventListener("click", () => { location.hash = "#status"; route(); });
+    window.addEventListener("hashchange", route);
+
+    // ---------- Modal (player list) ----------
+    function openModal(){
+      modalBack.classList.add("show");
+      modalBack.setAttribute("aria-hidden", "false");
+    }
+    function closeModalFn(){
+      modalBack.classList.remove("show");
+      modalBack.setAttribute("aria-hidden", "true");
+    }
+    closeModal.addEventListener("click", closeModalFn);
+    modalBack.addEventListener("click", (e) => { if(e.target === modalBack) closeModalFn(); });
+    window.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModalFn(); });
+
+    function renderPlayers(){
+      playerList.innerHTML = "";
+      const list = lastData?.players?.list || [];
+      const online = lastData?.players?.online ?? 0;
+
+      modalTitle.textContent = `Players (${online})`;
+
+      if(!lastData?.online){
+        playerList.innerHTML = `<div class="player"><div class="pname">Server is offline</div></div>`;
+        return;
+      }
+      if(list.length === 0){
+        playerList.innerHTML = `<div class="player"><div class="pname">No player list available</div><div class="puuid">Some servers hide it</div></div>`;
+        return;
+      }
+
+      for(const p of list){
+        const row = document.createElement("div");
+        row.className = "player";
+        row.innerHTML = `
+          <div>
+            <div class="pname">${escapeHtml(p.name || "Player")}</div>
+            <div class="puuid">${escapeHtml(p.uuid || "")}</div>
+          </div>
+          <div class="badge" style="padding:6px 10px;font-size:12px;">Online</div>
+        `;
+        playerList.appendChild(row);
+      }
+    }
+
+    playersBtnHome.addEventListener("click", () => { renderPlayers(); openModal(); });
+    playersBtnStatus.addEventListener("click", () => { renderPlayers(); openModal(); });
+
+    // ---------- Fetch helpers ----------
+    async function fetchJsonWithTimeout(url, ms=6500){
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), ms);
+      try{
+        const res = await fetch(url, { cache:"no-store", signal: controller.signal });
+        if(!res.ok) throw new Error("Bad response");
+        return await res.json();
+      } finally {
+        clearTimeout(t);
+      }
+    }
+
+    function setStatus(dotEl, textEl, state){
+      dotEl.classList.remove("online","offline");
+      if(state === true){
+        dotEl.classList.add("online");
+        textEl.textContent = "Online";
+      } else if(state === false){
+        dotEl.classList.add("offline");
+        textEl.textContent = "Offline";
+      } else {
+        textEl.textContent = "Checking…";
+      }
+    }
+
+    function setUpdatedLabel(el){
+      if(!lastUpdatedAt){ el.textContent = "Updated: —"; return; }
+      const s = Math.max(0, Math.floor((Date.now() - lastUpdatedAt) / 1000));
+      if(s < 10) el.textContent = "Updated: just now";
+      else if(s < 60) el.textContent = `Updated: ${s}s ago`;
+      else el.textContent = `Updated: ${Math.floor(s/60)}m ago`;
+    }
+
+    function formatMotd(d){
+      // prefer clean lines, fallback to raw
+      const clean = d?.motd?.clean;
+      if(Array.isArray(clean) && clean.length) return clean.join("\n");
+      const raw = d?.motd?.raw;
+      if(Array.isArray(raw) && raw.length) return raw.join("\n");
+      return "—";
+    }
+
+    async function loadStatus(){
+      // show "checking"
+      setStatus(statusDotHome, statusTextHome, null);
+      statusTextStatus.textContent = "Checking…";
+
+      try{
+        const d = await fetchJsonWithTimeout(`https://api.mcsrvstat.us/3/${SERVER}`, 6500);
+        lastData = d;
+        lastUpdatedAt = Date.now();
+
+        const online = !!d.online;
+
+        setStatus(statusDotHome, statusTextHome, online);
+        statusTextStatus.textContent = online ? "Online" : "Offline";
+
+        const on = d?.players?.online ?? 0;
+        const max = d?.players?.max ?? 0;
+
+        playersTextHome.textContent = `Players: ${on}/${max || "—"}`;
+        playersTextStatus.textContent = `${on}/${max || "—"}`;
+
+        // fill bars
+        let pct = 0;
+        if(max && max > 0) pct = Math.min(100, Math.round((on / max) * 100));
+        playerFillHome.style.width = pct + "%";
+        playerFillStatus.style.width = pct + "%";
+
+        const ver = d?.protocol?.name || d?.version || "—";
+        serverVerHome.textContent = ver;
+        serverVerStatus.textContent = ver;
+
+        // MOTD
+        const motd = formatMotd(d);
+        motdTextHome.textContent = motd;
+        motdTextStatus.textContent = motd;
+
+        // Status page debug
+        apiCache.textContent = d?.debug?.cachehit ? "hit" : "miss";
+        apiPing.textContent = d?.debug?.ping ? "ok" : "no";
+        apiQuery.textContent = d?.debug?.query ? "ok" : "no";
+
+        // Port
+        serverIpStatus.textContent = SERVER;
+        serverPortStatus.textContent = String(d?.port ?? 25565);
+
+        // enable/disable player list button
+        const hasList = Array.isArray(d?.players?.list) && d.players.list.length > 0;
+        const hint = online ? (hasList ? "Available" : "May be hidden") : "Offline";
+        playersBtnHome.textContent = `View player list (${hint})`;
+        playersBtnStatus.textContent = `View player list (${hint})`;
+
+      } catch {
+        statusTextHome.textContent = "Unavailable";
+        statusTextStatus.textContent = "Unavailable";
+        playersTextHome.textContent = "Players: —/—";
+        playersTextStatus.textContent = "—/—";
+        playerFillHome.style.width = "0%";
+        playerFillStatus.style.width = "0%";
+        serverVerHome.textContent = "—";
+        serverVerStatus.textContent = "—";
+        motdTextHome.textContent = "Couldn’t load MOTD (network/API blocked).";
+        motdTextStatus.textContent = "Couldn’t load MOTD (network/API blocked).";
+        apiCache.textContent = "—";
+        apiPing.textContent = "—";
+        apiQuery.textContent = "—";
+      }
+
+      setUpdatedLabel(updatedTextHome);
+      setUpdatedLabel(updatedTextStatus);
+    }
+
+    async function loadLatest(){
+      try{
+        const j = await fetchJsonWithTimeout("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", 6500);
+        const latest = j?.latest?.release || "Latest";
+        latestVerHome.textContent = latest;
+        latestVerStatus.textContent = latest;
+      } catch {
+        latestVerHome.textContent = "Latest";
+        latestVerStatus.textContent = "Latest";
+      }
+    }
+
+    // ---------- Icon + favicon ----------
+    function setIcon(){
+      const url = `https://api.mcsrvstat.us/icon/${SERVER}`;
+      srvIcon.src = url;
+      srvIcon2.src = url;
+      favicon.href = url;
+      srvIcon.onerror = () => srvIcon.style.display = "none";
+      srvIcon2.onerror = () => srvIcon2.style.display = "none";
+    }
+
+    // ---------- Seasonal themes + particles ----------
+    const THEMES = [
+      { key:"winter", name:"Winter", glow:[120,180,255], particle:"rgba(255,255,255,.65)", mode:"snow" },
+      { key:"spring", name:"Spring", glow:[120,255,180], particle:"rgba(180,255,220,.45)", mode:"rain" },
+      { key:"summer", name:"Summer", glow:[255,200,120], particle:"rgba(255,255,255,.28)", mode:"stars" },
+      { key:"fall",   name:"Fall",   glow:[255,170,120], particle:"rgba(255,210,170,.50)", mode:"leaves" }
+    ];
+
+    function autoThemeIndex(){
+      const m = new Date().getMonth() + 1; // 1..12
+      if([12,1,2].includes(m)) return 0;   // winter
+      if([3,4,5].includes(m)) return 1;    // spring
+      if([6,7,8].includes(m)) return 2;    // summer
+      return 3;                             // fall
+    }
+
+    function applyTheme(idx, labelSuffix="(auto)"){
+      const t = THEMES[idx];
+      document.documentElement.style.setProperty("--glowR", t.glow[0]);
+      document.documentElement.style.setProperty("--glowG", t.glow[1]);
+      document.documentElement.style.setProperty("--glowB", t.glow[2]);
+      document.documentElement.style.setProperty("--particle", t.particle);
+
+      // accent derived from glow
+      document.documentElement.style.setProperty("--accent", `rgba(${t.glow[0]},${t.glow[1]},${t.glow[2]},.55)`);
+      document.documentElement.style.setProperty("--accentSoft", `rgba(${t.glow[0]},${t.glow[1]},${t.glow[2]},.18)`);
+
+      themeLabel.textContent = `${t.name} ${labelSuffix}`;
+      buildParticles(t.mode);
+      localStorage.setItem("themeIdx", String(idx));
+      localStorage.setItem("themeAuto", labelSuffix.includes("auto") ? "1" : "0");
+    }
+
+    function buildParticles(mode){
+      const container = document.getElementById("particles");
+      container.innerHTML = "";
+
+      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if(reduceMotion) return;
+
+      // counts tuned to be visible but not crazy
+      const config = {
+        snow:  70,
+        rain:  55,
+        stars: 45,
+        leaves: 50
+      };
+      const count = config[mode] ?? 60;
+
+      for(let i=0;i<count;i++){
+        const el = document.createElement("div");
+        el.className = "p";
+
+        const left = Math.random()*100;
+
+        if(mode === "snow"){
+          const size = 2.5 + Math.random()*3.5;
+          el.style.width = size+"px";
+          el.style.height = size+"px";
+          el.style.opacity = (0.25 + Math.random()*0.55).toFixed(2);
+          el.style.borderRadius = "999px";
+          el.style.animationDuration = (10 + Math.random()*10) + "s";
+          el.style.animationDelay = (Math.random()*10) + "s";
+          el.style.setProperty("--drift", (Math.random()*40-20) + "px");
+        }
+
+        if(mode === "rain"){
+          // thin drops
+          const w = 2;
+          const h = 10 + Math.random()*14;
+          el.style.width = w+"px";
+          el.style.height = h+"px";
+          el.style.opacity = (0.15 + Math.random()*0.35).toFixed(2);
+          el.style.borderRadius = "999px";
+          el.style.animationDuration = (6 + Math.random()*5) + "s";
+          el.style.animationDelay = (Math.random()*6) + "s";
+          el.style.setProperty("--drift", (Math.random()*18-9) + "px");
+        }
+
+        if(mode === "stars"){
+          // drifting twinkles (slow)
+          const size = 1.5 + Math.random()*2.5;
+          el.style.width = size+"px";
+          el.style.height = size+"px";
+          el.style.opacity = (0.10 + Math.random()*0.25).toFixed(2);
+          el.style.borderRadius = "999px";
+          el.style.top = (Math.random()*100) + "dvh"; // not falling much
+          el.style.animationName = "driftSide";
+          el.style.animationDuration = (8 + Math.random()*10) + "s";
+          el.style.animationDelay = (Math.random()*6) + "s";
+          el.style.setProperty("--side", (Math.random()*30-15) + "px");
+        }
+
+        if(mode === "leaves"){
+          const size = 3 + Math.random()*6;
+          el.style.width = size+"px";
+          el.style.height = size+"px";
+          el.style.opacity = (0.18 + Math.random()*0.45).toFixed(2);
+          el.style.borderRadius = "6px";
+          el.style.animationDuration = (9 + Math.random()*9) + "s";
+          el.style.animationDelay = (Math.random()*8) + "s";
+          el.style.setProperty("--drift", (Math.random()*60-30) + "px");
+          // little rotate vibe via filter and random tint-ish (still subtle)
+          el.style.filter = "blur(.15px)";
+        }
+
+        el.style.left = left + "%";
+        container.appendChild(el);
+      }
+    }
+
+    // Theme init + cycle
+    let themeIdx = null;
+    const stored = localStorage.getItem("themeIdx");
+    const storedAuto = localStorage.getItem("themeAuto");
+
+    if(stored !== null && storedAuto === "0"){
+      themeIdx = Math.max(0, Math.min(THEMES.length-1, parseInt(stored,10)));
+      applyTheme(themeIdx, "(manual)");
+    } else {
+      themeIdx = autoThemeIndex();
+      applyTheme(themeIdx, "(auto)");
+    }
+
+    themeChip.addEventListener("click", () => {
+      themeIdx = (themeIdx + 1) % THEMES.length;
+      applyTheme(themeIdx, "(manual)");
+      showToast("Theme changed");
+    });
+
+    // ---------- small helpers ----------
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[s]));
+    }
+
+    // ---------- Init ----------
+    route();
+    setIcon();
+    loadStatus();
+    loadLatest();
+    setInterval(loadStatus, 120000);
+    setInterval(loadLatest, 120000);
+    setInterval(() => {
+      setUpdatedLabel(updatedTextHome);
+      setUpdatedLabel(updatedTextStatus);
+    }, 1000);
+  </script>
+</body>
+</html>      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       display:grid;
       place-items:center;
