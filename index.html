@@ -6,51 +6,69 @@
   <title>lnvnl</title>
 
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #ffffff;
-      color: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      text-align: center;
+    :root{
+      --bg:#0b0f14; --card:#111827; --text:#e5e7eb; --muted:#9ca3af;
+      --border:#1f2937; --btn:#e5e7eb; --btnText:#0b0f14;
     }
-
-    h1 {
-      font-size: 48px;
-      margin: 0;
-      letter-spacing: -1px;
-      font-weight: 700;
-    }
-
-    p {
-      margin-top: 12px;
-      font-size: 18px;
-      color: #444;
-    }
-
-    .btn {
-      margin-top: 35px;
-      padding: 12px 28px;
-      background: #111;
-      color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 16px;
-      transition: 0.25s;
-    }
-
-    .btn:hover {
-      background: #333;
-    }
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);
+      min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;}
+    .card{width:100%;max-width:520px;background:var(--card);border:1px solid var(--border);
+      border-radius:18px;padding:28px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35);}
+    h1{font-size:44px;margin:0 0 10px;letter-spacing:-1px;font-weight:800;}
+    p{margin:0 0 22px;color:var(--muted);font-size:16px;line-height:1.5;}
+    .server-box{background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:left;}
+    .label{color:var(--muted);font-size:13px;margin-bottom:6px;}
+    .ip-row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+    .ip{font-size:18px;font-weight:700;word-break:break-word;}
+    .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;background:var(--btn);
+      color:var(--btnText);font-weight:700;transition:.2s;}
+    .btn:hover{opacity:.9;}
+    .pill{display:inline-block;margin-top:12px;padding:8px 12px;border-radius:999px;
+      border:1px solid var(--border);color:var(--muted);font-size:13px;}
   </style>
 </head>
+
 <body>
-  <h1>lnvnl</h1>
-  <p>Welcome to my site.</p>
-  <a class="btn" href="https://github.com/m7mdxz" target="_blank">GitHub</a>
+  <div class="card">
+    <h1>lnvnl</h1>
+    <p>Minecraft server info</p>
+
+    <div class="server-box">
+      <div class="label">Server Address</div>
+      <div class="ip-row">
+        <div class="ip" id="serverIp">mc.lnvnl.org</div>
+        <button class="btn" id="copyBtn" onclick="copyIP()">Copy</button>
+      </div>
+
+      <div class="pill">
+        Java Edition • Latest: <span id="mcVer">Loading…</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyIP() {
+      const ip = document.getElementById("serverIp").textContent.trim();
+      navigator.clipboard.writeText(ip).then(() => {
+        const b = document.getElementById("copyBtn");
+        b.textContent = "Copied!";
+        setTimeout(() => b.textContent = "Copy", 1200);
+      });
+    }
+
+    async function loadLatestVersion() {
+      const el = document.getElementById("mcVer");
+      try {
+        // Mojang launcher version manifest
+        const res = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("bad response");
+        const data = await res.json();
+        el.textContent = data?.latest?.release || "Latest";
+      } catch (e) {
+        el.textContent = "Latest";
+      }
+    }
+    loadLatestVersion();
+  </script>
 </body>
 </html>
