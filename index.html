@@ -6,6 +6,9 @@
   <meta name="theme-color" content="#070a10" />
   <title>Mnwab</title>
 
+  <!-- Favicon will be set by JS to your server icon -->
+  <link id="favicon" rel="icon" href="" />
+
   <style>
     :root{
       --bg:#070a10;
@@ -42,7 +45,7 @@
         var(--bg);
     }
 
-    /* ❄️ Snow layer */
+    /* ❄️ Snow */
     .snow{
       position:fixed;
       inset:0;
@@ -84,9 +87,24 @@
     }
 
     .title{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin-bottom: 6px;
       text-align:center;
-      margin-bottom: 18px;
     }
+
+    .srv-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(31,41,55,.9);
+      box-shadow: 0 12px 30px rgba(0,0,0,.4);
+      object-fit: cover;
+    }
+
     h1{
       margin:0;
       font-size:40px;
@@ -94,9 +112,10 @@
       font-weight:850;
     }
     .byline{
-      margin-top:6px;
+      margin: 6px 0 18px;
       color:var(--muted);
       font-size:13px;
+      text-align:center;
     }
 
     .server{
@@ -129,6 +148,19 @@
       word-break: break-word;
     }
 
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(31,41,55,.9);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+
     .dot{
       width:10px;
       height:10px;
@@ -144,7 +176,7 @@
     .dot.offline{
       background:var(--bad);
       box-shadow:0 0 14px rgba(251,113,133,.45);
-      animation: none;
+      animation:none;
     }
     @keyframes pulse{
       0%,100%{transform:scale(1); opacity:.85}
@@ -166,6 +198,15 @@
     .btn:hover{ transform: translateY(-1px); }
     .btn:active{ transform: translateY(0) scale(.98); }
 
+    .btn.big{
+      width:100%;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      font-size:15px;
+      letter-spacing:.2px;
+    }
+
     .pill{
       margin-top:12px;
       padding:10px 12px;
@@ -182,8 +223,41 @@
 
     .strong{ color: var(--text); font-weight:800; }
 
+    /* Player bar */
+    .bar-wrap{
+      margin-top:12px;
+      border-radius:14px;
+      border:1px solid rgba(31,41,55,.9);
+      background: rgba(255,255,255,.03);
+      padding:10px 12px;
+    }
+    .bar-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color: var(--muted);
+      margin-bottom:8px;
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      border:1px solid rgba(31,41,55,.65);
+    }
+    .fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background: rgba(var(--glow), .55);
+      box-shadow: 0 0 18px rgba(var(--glow), .18);
+      transition: width .35s ease;
+    }
+
     .toast{
-      margin-top: 14px;
+      margin-top: 12px;
       text-align:center;
       font-size:12.5px;
       color: rgba(156,163,175,.85);
@@ -197,47 +271,53 @@
       color: rgba(156,163,175,.7);
     }
 
-    /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce){
       .flake{ display:none; }
       .card{ animation:none; }
       .dot{ animation:none; }
       .btn{ transition:none; }
+      .fill{ transition:none; }
     }
   </style>
 </head>
 
 <body>
-  <!-- ❄️ Snow -->
   <div class="snow" id="snow"></div>
 
   <main class="card">
     <div class="title">
+      <img class="srv-icon" id="srvIcon" alt="Server icon" />
       <h1>Mnwab</h1>
-      <div class="byline">by lnvnl</div>
     </div>
+    <div class="byline">by lnvnl</div>
 
     <section class="server">
       <div class="label">Server Address (Java)</div>
 
       <div class="row">
         <div class="ip">
-          <span class="dot" id="statusDot" aria-hidden="true"></span>
           <span id="serverIp">mc.lnvnl.org</span>
         </div>
 
-        <button class="btn" id="copyBtn" type="button">Copy</button>
+        <div class="badge" title="Live status">
+          <span class="dot" id="statusDot" aria-hidden="true"></span>
+          <span id="statusText">Checking…</span>
+        </div>
+      </div>
+
+      <button class="btn big" id="joinBtn" type="button">Join / Copy IP</button>
+
+      <div class="bar-wrap">
+        <div class="bar-top">
+          <span id="playersText">Players: —/—</span>
+          <span id="updatedText">Updated: —</span>
+        </div>
+        <div class="bar"><div class="fill" id="playerFill"></div></div>
       </div>
 
       <div class="pill">
-        <span>Status: <span class="strong" id="statusText">Checking…</span></span>
-        <span id="playersText">Players: —/—</span>
-        <span id="serverVer">Server: —</span>
-      </div>
-
-      <div class="pill">
-        <span>Latest Minecraft release</span>
-        <span>v <span class="strong" id="latestVer">Loading…</span></span>
+        <span>Server: <span class="strong" id="serverVer">—</span></span>
+        <span>Latest MC: <span class="strong" id="latestVer">Loading…</span></span>
       </div>
 
       <div class="toast" id="toast"></div>
@@ -247,10 +327,19 @@
 
   <script>
     const SERVER = "mc.lnvnl.org";
-
-    // ----- Copy (mobile-friendly + fallback) -----
-    const copyBtn = document.getElementById("copyBtn");
     const toast = document.getElementById("toast");
+    const joinBtn = document.getElementById("joinBtn");
+    const statusDot = document.getElementById("statusDot");
+    const statusText = document.getElementById("statusText");
+    const playersText = document.getElementById("playersText");
+    const serverVer = document.getElementById("serverVer");
+    const latestVer = document.getElementById("latestVer");
+    const updatedText = document.getElementById("updatedText");
+    const playerFill = document.getElementById("playerFill");
+    const srvIcon = document.getElementById("srvIcon");
+    const favicon = document.getElementById("favicon");
+
+    let lastUpdatedAt = null;
 
     function showToast(msg){
       toast.textContent = msg;
@@ -265,8 +354,6 @@
           return true;
         }
       }catch(e){}
-
-      // Fallback
       try{
         const ta = document.createElement("textarea");
         ta.value = text;
@@ -283,31 +370,35 @@
       }
     }
 
-    copyBtn.addEventListener("click", async () => {
+    joinBtn.addEventListener("click", async () => {
       const ok = await copyText(SERVER);
-      copyBtn.textContent = ok ? "Copied!" : "Copy failed";
-      showToast(ok ? "Copied to clipboard" : "Couldn’t copy (browser blocked it)");
-      setTimeout(() => copyBtn.textContent = "Copy", 1200);
+      joinBtn.textContent = ok ? "Copied ✓" : "Copy failed";
+      showToast(ok ? "Copied to clipboard" : "Browser blocked copying");
+      setTimeout(() => joinBtn.textContent = "Join / Copy IP", 1200);
     });
 
-    // ----- Status helpers -----
     function setStatus(state){
-      const dot = document.getElementById("statusDot");
-      const text = document.getElementById("statusText");
-
-      dot.classList.remove("online","offline");
+      statusDot.classList.remove("online","offline");
       if(state === true){
-        dot.classList.add("online");
-        text.textContent = "Online";
+        statusDot.classList.add("online");
+        statusText.textContent = "Online";
       } else if(state === false){
-        dot.classList.add("offline");
-        text.textContent = "Offline";
+        statusDot.classList.add("offline");
+        statusText.textContent = "Offline";
       } else {
-        text.textContent = "Checking…";
+        statusText.textContent = "Checking…";
       }
     }
 
-    async function fetchJsonWithTimeout(url, ms=6000){
+    function setUpdatedLabel(){
+      if(!lastUpdatedAt){ updatedText.textContent = "Updated: —"; return; }
+      const s = Math.max(0, Math.floor((Date.now() - lastUpdatedAt) / 1000));
+      if(s < 10) updatedText.textContent = "Updated: just now";
+      else if(s < 60) updatedText.textContent = `Updated: ${s}s ago`;
+      else updatedText.textContent = `Updated: ${Math.floor(s/60)}m ago`;
+    }
+
+    async function fetchJsonWithTimeout(url, ms=6500){
       const controller = new AbortController();
       const t = setTimeout(() => controller.abort(), ms);
       try{
@@ -319,60 +410,77 @@
       }
     }
 
-    // ----- Live server status -----
     async function loadStatus(){
       setStatus(null);
+
       try{
-        const d = await fetchJsonWithTimeout(`https://api.mcsrvstat.us/3/${SERVER}`, 6000);
+        const d = await fetchJsonWithTimeout(`https://api.mcsrvstat.us/3/${SERVER}`, 6500);
+
+        lastUpdatedAt = Date.now();
+        setUpdatedLabel();
 
         if(d && d.online){
           setStatus(true);
+
           const online = d?.players?.online ?? 0;
-          const max = d?.players?.max ?? "—";
-          document.getElementById("playersText").textContent = `Players: ${online}/${max}`;
+          const max = d?.players?.max ?? 0;
+          playersText.textContent = `Players: ${online}/${max || "—"}`;
 
           const ver = d?.protocol?.name || d?.version || "—";
-          document.getElementById("serverVer").textContent = `Server: ${ver}`;
+          serverVer.textContent = ver;
+
+          // Player bar
+          let pct = 0;
+          if (max && max > 0) pct = Math.min(100, Math.round((online / max) * 100));
+          playerFill.style.width = pct + "%";
         } else {
           setStatus(false);
-          document.getElementById("playersText").textContent = "Players: —/—";
-          document.getElementById("serverVer").textContent = "Server: —";
+          playersText.textContent = "Players: —/—";
+          serverVer.textContent = "—";
+          playerFill.style.width = "0%";
         }
       } catch {
-        // If the API is blocked on some networks, keep it clean
-        document.getElementById("statusText").textContent = "Unavailable";
-        document.getElementById("playersText").textContent = "Players: —/—";
-        document.getElementById("serverVer").textContent = "Server: —";
+        statusText.textContent = "Unavailable";
+        playersText.textContent = "Players: —/—";
+        serverVer.textContent = "—";
+        playerFill.style.width = "0%";
       }
     }
 
-    // ----- Latest Minecraft release -----
     async function loadLatest(){
       try{
-        const j = await fetchJsonWithTimeout("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", 6000);
-        document.getElementById("latestVer").textContent = j?.latest?.release || "Latest";
+        const j = await fetchJsonWithTimeout("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", 6500);
+        latestVer.textContent = j?.latest?.release || "Latest";
       } catch {
-        document.getElementById("latestVer").textContent = "Latest";
+        latestVer.textContent = "Latest";
       }
     }
 
-    // ----- ❄️ Snow (subtle but visible) -----
+    // Auto server icon + favicon
+    function setIcon(){
+      const url = `https://api.mcsrvstat.us/icon/${SERVER}`;
+      srvIcon.src = url;
+      srvIcon.onerror = () => { srvIcon.style.display = "none"; };
+      favicon.href = url;
+    }
+
+    // Snow (visible but still chill)
     function makeSnow(){
       const container = document.getElementById("snow");
       const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (reduceMotion) return;
 
-      const count = 70; // slightly more visible
+      const count = 70;
       for(let i=0;i<count;i++){
         const f = document.createElement("div");
         f.className = "flake";
 
-        const size = 2.5 + Math.random()*3.5; // 2.5px to 6px
+        const size = 2.5 + Math.random()*3.5;     // 2.5..6px
         const left = Math.random()*100;
-        const duration = 10 + Math.random()*10; // 10s to 20s
+        const duration = 10 + Math.random()*10;    // 10..20s
         const delay = Math.random()*10;
-        const opacity = 0.25 + Math.random()*0.55; // 0.25 to 0.80
-        const drift = (Math.random()*40 - 20) + "px"; // -20px..20px
+        const opacity = 0.25 + Math.random()*0.55; // 0.25..0.80
+        const drift = (Math.random()*40 - 20) + "px";
 
         f.style.width = size + "px";
         f.style.height = size + "px";
@@ -388,13 +496,15 @@
 
     // Init
     document.getElementById("serverIp").textContent = SERVER;
+    setIcon();
     makeSnow();
+
     loadStatus();
     loadLatest();
 
-    // Refresh (API caching happens anyway)
     setInterval(loadStatus, 120000);
     setInterval(loadLatest, 120000);
+    setInterval(setUpdatedLabel, 1000);
   </script>
 </body>
 </html>
