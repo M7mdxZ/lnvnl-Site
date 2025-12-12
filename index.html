@@ -7,68 +7,258 @@
 
   <style>
     :root{
-      --bg:#0b0f14; --card:#111827; --text:#e5e7eb; --muted:#9ca3af;
-      --border:#1f2937; --btn:#e5e7eb; --btnText:#0b0f14;
+      --bg:#070a10; --card:#0e1626; --text:#e5e7eb; --muted:#9ca3af;
+      --border:#1f2937; --btn:#e5e7eb; --btnText:#070a10;
+      --glow: 120, 180, 255; /* rgb */
+      --good:#34d399; --bad:#fb7185; --warn:#fbbf24;
     }
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);
-      min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;}
-    .card{width:100%;max-width:520px;background:var(--card);border:1px solid var(--border);
-      border-radius:18px;padding:28px 22px;box-shadow:0 10px 30px rgba(0,0,0,.35);}
-    h1{font-size:44px;margin:0 0 10px;letter-spacing:-1px;font-weight:800;}
-    p{margin:0 0 22px;color:var(--muted);font-size:16px;line-height:1.5;}
-    .server-box{background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:left;}
-    .label{color:var(--muted);font-size:13px;margin-bottom:6px;}
-    .ip-row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
-    .ip{font-size:18px;font-weight:700;word-break:break-word;}
-    .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;background:var(--btn);
-      color:var(--btnText);font-weight:700;transition:.2s;}
-    .btn:hover{opacity:.9;}
-    .pill{display:inline-block;margin-top:12px;padding:8px 12px;border-radius:999px;
-      border:1px solid var(--border);color:var(--muted);font-size:13px;}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif;
+      background: radial-gradient(900px 450px at 20% 10%, rgba(var(--glow),.12), transparent 60%),
+                  radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,.06), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding: 26px;
+      overflow:hidden;
+    }
+    .blob{
+      position:absolute; width:520px; height:520px; border-radius:999px;
+      filter: blur(40px); opacity:.12;
+      background: radial-gradient(circle at 30% 30%, rgba(var(--glow),.9), transparent 55%);
+      animation: floaty 10s ease-in-out infinite; pointer-events:none;
+    }
+    .blob.b2{
+      width:640px;height:640px; left:auto;right:-240px;top:10%;
+      background: radial-gradient(circle at 40% 40%, rgba(180,255,220,.8), transparent 55%);
+      animation-duration: 12s; opacity:.10;
+    }
+    .blob.b1{left:-220px; top:35%;}
+    @keyframes floaty{ 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(18px,-16px) scale(1.03)} }
+
+    .card{
+      position:relative;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 22px;
+      padding: 28px 22px;
+      background: rgba(14,22,38,.75);
+      border: 1px solid rgba(31,41,55,.75);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.03) inset;
+      backdrop-filter: blur(10px);
+      transform: translateY(10px);
+      opacity: 0;
+      animation: enter .7s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .card::before{
+      content:""; position:absolute; inset:-1px; border-radius: 22px; padding:1px;
+      background: linear-gradient(120deg, rgba(var(--glow),.45), rgba(255,255,255,.12), rgba(180,255,220,.35), rgba(var(--glow),.45));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      opacity:.35; animation: shimmer 4.5s linear infinite; pointer-events:none;
+    }
+    @keyframes shimmer{ 0%{filter:hue-rotate(0deg);transform:translateX(-6px)} 50%{filter:hue-rotate(20deg);transform:translateX(6px)} 100%{filter:hue-rotate(0deg);transform:translateX(-6px)} }
+    @keyframes enter{ to{transform: translateY(0); opacity:1;} }
+
+    .top{
+      display:flex; align-items:center; justify-content:center; gap:14px;
+      margin-bottom: 6px;
+    }
+    .icon{
+      width:48px;height:48px;border-radius:14px;
+      border:1px solid rgba(31,41,55,.9);
+      background: rgba(0,0,0,.25);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    h1{font-size:46px;margin:0;letter-spacing:-1.2px;font-weight:850;text-align:center;}
+    .sub{margin: 6px 0 18px 0;color: var(--muted);font-size: 15.5px;line-height: 1.5;text-align:center;}
+
+    .server-box{
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(31,41,55,.9);
+      background: rgba(0,0,0,.22);
+      padding: 16px;
+    }
+    .label{color: var(--muted);font-size: 12.5px;margin-bottom: 8px;}
+    .ip-row{display:flex;gap: 10px;align-items:center;justify-content: space-between;flex-wrap: wrap;}
+    .ip{font-size: 18px;font-weight: 800;letter-spacing: .2px;word-break: break-word;display:flex;align-items:center;gap: 10px;}
+
+    .statusdot{
+      width:10px;height:10px;border-radius:999px;
+      background: var(--warn);
+      box-shadow: 0 0 18px rgba(251,191,36,.45);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    .statusdot.online{ background: var(--good); box-shadow: 0 0 18px rgba(52,211,153,.45); }
+    .statusdot.offline{ background: var(--bad); box-shadow: 0 0 18px rgba(251,113,133,.45); }
+    @keyframes pulse{ 0%,100%{transform: scale(1); opacity:.8} 50%{transform: scale(1.25); opacity:1} }
+
+    .btn{
+      position:relative;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: var(--btn);
+      color: var(--btnText);
+      font-weight: 800;
+      transition: transform .18s ease, opacity .18s ease;
+      overflow:hidden;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0px) scale(.98); }
+    .btn .ripple{
+      position:absolute; border-radius:999px; transform: translate(-50%,-50%);
+      background: rgba(0,0,0,.12); animation: rip .55s ease-out forwards; pointer-events:none;
+    }
+    @keyframes rip{ from{width:0;height:0;opacity:.9} to{width:420px;height:420px;opacity:0} }
+
+    .pill{
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(31,41,55,.9);
+      background: rgba(255,255,255,.03);
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .tag{color: rgba(229,231,235,.95); font-weight: 800;}
+    .motd{
+      margin-top: 12px;
+      color: rgba(156,163,175,.85);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .footer{margin-top: 14px;color: rgba(156,163,175,.7);font-size: 12.5px;text-align:center;}
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>lnvnl</h1>
-    <p>Minecraft server info</p>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
 
-    <div class="server-box">
+  <main class="card">
+    <div class="top">
+      <img class="icon" id="srvIcon" alt="Server icon" />
+      <h1>lnvnl</h1>
+    </div>
+    <p class="sub">Minecraft server (Java)</p>
+
+    <section class="server-box">
       <div class="label">Server Address</div>
+
       <div class="ip-row">
-        <div class="ip" id="serverIp">mc.lnvnl.org</div>
-        <button class="btn" id="copyBtn" onclick="copyIP()">Copy</button>
+        <div class="ip">
+          <span class="statusdot" id="statusDot" aria-hidden="true"></span>
+          <span id="serverIp">mc.lnvnl.org</span>
+        </div>
+        <button class="btn" id="copyBtn" onclick="copyIP(event)">Copy</button>
       </div>
 
       <div class="pill">
-        Java Edition • Latest: <span id="mcVer">Loading…</span>
+        <span><span class="tag" id="statusText">Checking…</span> • <span id="playersText">Players: —/—</span></span>
+        <span>Server: <span class="tag" id="serverVer">—</span></span>
       </div>
-    </div>
-  </div>
+
+      <div class="pill">
+        <span>Latest Minecraft release</span>
+        <span>v <span class="tag" id="latestVer">Loading…</span></span>
+      </div>
+
+      <div class="motd" id="motdText"></div>
+      <div class="footer">Multiplayer → Add Server → paste the address</div>
+    </section>
+  </main>
 
   <script>
-    function copyIP() {
-      const ip = document.getElementById("serverIp").textContent.trim();
-      navigator.clipboard.writeText(ip).then(() => {
-        const b = document.getElementById("copyBtn");
-        b.textContent = "Copied!";
-        setTimeout(() => b.textContent = "Copy", 1200);
+    const SERVER = "mc.lnvnl.org";
+
+    function copyIP(e) {
+      const btn = document.getElementById("copyBtn");
+      const r = document.createElement("span");
+      r.className = "ripple";
+      const rect = btn.getBoundingClientRect();
+      r.style.left = (e.clientX - rect.left) + "px";
+      r.style.top  = (e.clientY - rect.top) + "px";
+      btn.appendChild(r);
+      setTimeout(() => r.remove(), 600);
+
+      navigator.clipboard.writeText(SERVER).then(() => {
+        btn.textContent = "Copied!";
+        setTimeout(() => btn.textContent = "Copy", 1200);
       });
     }
 
-    async function loadLatestVersion() {
-      const el = document.getElementById("mcVer");
+    function setStatus(online) {
+      const dot = document.getElementById("statusDot");
+      const text = document.getElementById("statusText");
+      dot.classList.remove("online","offline");
+      if (online === true) { dot.classList.add("online"); text.textContent = "Online"; }
+      else if (online === false) { dot.classList.add("offline"); text.textContent = "Offline"; }
+      else { text.textContent = "Checking…"; }
+    }
+
+    async function loadServerStatus() {
+      document.getElementById("serverIp").textContent = SERVER;
+      document.getElementById("srvIcon").src = `https://api.mcsrvstat.us/icon/${SERVER}`;
+
       try {
-        // Mojang launcher version manifest
+        const res = await fetch(`https://api.mcsrvstat.us/3/${SERVER}`, { cache: "no-store" });
+        if (!res.ok) throw new Error("bad response");
+        const data = await res.json();
+
+        setStatus(data.online);
+
+        if (data.online) {
+          const online = data?.players?.online ?? 0;
+          const max = data?.players?.max ?? "—";
+          document.getElementById("playersText").textContent = `Players: ${online}/${max}`;
+          document.getElementById("serverVer").textContent = data?.protocol?.name || data?.version || "—";
+
+          const motdLines = data?.motd?.clean || [];
+          document.getElementById("motdText").textContent =
+            motdLines.length ? motdLines.join(" • ") : "";
+        } else {
+          document.getElementById("playersText").textContent = "Players: —/—";
+          document.getElementById("serverVer").textContent = "—";
+          document.getElementById("motdText").textContent = "";
+        }
+      } catch {
+        setStatus(null);
+        document.getElementById("playersText").textContent = "Players: —/—";
+        document.getElementById("serverVer").textContent = "—";
+        document.getElementById("motdText").textContent = "Status unavailable (API blocked/offline).";
+      }
+    }
+
+    async function loadLatestRelease() {
+      try {
         const res = await fetch("https://piston-meta.mojang.com/mc/game/version_manifest_v2.json", { cache: "no-store" });
         if (!res.ok) throw new Error("bad response");
         const data = await res.json();
-        el.textContent = data?.latest?.release || "Latest";
-      } catch (e) {
-        el.textContent = "Latest";
+        document.getElementById("latestVer").textContent = data?.latest?.release || "Latest";
+      } catch {
+        document.getElementById("latestVer").textContent = "Latest";
       }
     }
-    loadLatestVersion();
+
+    loadServerStatus();
+    loadLatestRelease();
+
+    // mcsrvstat.us responses are cached for ~2 minutes, so refresh every 2 min
+    setInterval(loadServerStatus, 120000);
+    setInterval(loadLatestRelease, 120000);
   </script>
 </body>
 </html>
