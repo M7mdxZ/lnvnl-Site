@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#070a10" />
+  <meta name="theme-color" content="#05070c" />
   <title>Mnwab • Christmas</title>
 
   <!-- Pixel font for IP only -->
@@ -18,28 +18,24 @@
       --bg:#05070c;
       --text:#f3f4f6;
       --muted:#a9b0ba;
-      --border: rgba(43,55,72,.85);
+      --border: rgba(55,70,90,.82);
 
-      --card: rgba(10,16,28,.78);
+      --card: rgba(10,16,28,.80);
       --card2: rgba(0,0,0,.24);
-
-      --btn:#f3f4f6;
-      --btnText:#071018;
 
       --good:#34d399;
       --bad:#fb7185;
       --warn:#fbbf24;
 
-      /* Christmas palette */
       --xred:#ef4444;
       --xgreen:#22c55e;
       --xgold:#fbbf24;
 
-      --glowR:255; --glowG:90; --glowB:90;  /* warm red glow */
-      --accent: rgba(34,197,94,.55);         /* green accent */
-      --accentSoft: rgba(34,197,94,.18);
+      --glowR:255; --glowG:90; --glowB:90;
+      --accent: rgba(34,197,94,.60);
+      --accentSoft: rgba(34,197,94,.22);
 
-      --snow: rgba(255,255,255,.7);
+      --snow: rgba(255,255,255,.72);
     }
 
     *{ box-sizing:border-box }
@@ -56,9 +52,9 @@
       padding:24px;
       overflow:hidden;
       background:
-        radial-gradient(900px 450px at 20% 10%, rgba(var(--glowR),var(--glowG),var(--glowB),.14), transparent 60%),
-        radial-gradient(700px 500px at 80% 30%, rgba(34,197,94,.08), transparent 60%),
-        radial-gradient(900px 650px at 50% 100%, rgba(251,191,36,.06), transparent 70%),
+        radial-gradient(950px 520px at 20% 10%, rgba(var(--glowR),var(--glowG),var(--glowB),.16), transparent 62%),
+        radial-gradient(780px 560px at 80% 30%, rgba(34,197,94,.10), transparent 62%),
+        radial-gradient(920px 680px at 50% 100%, rgba(251,191,36,.08), transparent 72%),
         var(--bg);
     }
 
@@ -73,7 +69,7 @@
       gap:10px;
       padding:8px;
       border-radius:999px;
-      border:1px solid rgba(43,55,72,.75);
+      border:1px solid rgba(55,70,90,.70);
       background: rgba(10,14,22,.58);
       backdrop-filter: blur(10px);
       box-shadow: 0 14px 40px rgba(0,0,0,.35);
@@ -82,7 +78,7 @@
       appearance:none;
       border:none;
       background:transparent;
-      color:rgba(243,244,246,.88);
+      color:rgba(243,244,246,.90);
       font-weight:950;
       padding:10px 14px;
       border-radius:999px;
@@ -94,8 +90,7 @@
     .tab:hover{ background: rgba(255,255,255,.06); }
     .tab:active{ transform: scale(.98); }
     .tab.active{
-      background:
-        linear-gradient(90deg, rgba(239,68,68,.16), rgba(34,197,94,.12));
+      background: linear-gradient(90deg, rgba(239,68,68,.18), rgba(34,197,94,.14));
       opacity:1;
       border:1px solid rgba(255,255,255,.06);
     }
@@ -112,49 +107,92 @@
       top:-12px;
       border-radius:999px;
       background: var(--snow);
-      filter: blur(.15px);
+      filter: blur(.12px);
       animation: fall linear infinite;
       will-change: transform;
       opacity:.6;
-      box-shadow: 0 0 10px rgba(255,255,255,.12);
+      box-shadow: 0 0 12px rgba(255,255,255,.14);
     }
-    @keyframes fall{
-      to{ transform: translate(var(--drift), 110dvh); }
-    }
+    @keyframes fall{ to{ transform: translate(var(--drift), 110dvh); } }
 
     .card{
       position:relative;
       z-index:1;
       width:100%;
-      max-width:640px;
-      border-radius:22px;
+      max-width:660px;
+      border-radius:24px;
       padding:26px;
       background: var(--card);
-      border:1px solid rgba(43,55,72,.85);
-      box-shadow:0 22px 70px rgba(0,0,0,.65);
+      border:1px solid rgba(55,70,90,.86);
+      box-shadow:0 24px 80px rgba(0,0,0,.68);
       backdrop-filter: blur(10px);
       animation: fadeUp .6s ease forwards;
+      overflow:hidden;
     }
     @keyframes fadeUp{
       from{opacity:0; transform:translateY(14px)}
       to{opacity:1; transform:translateY(0)}
     }
 
-    /* candy-cane accent */
+    /* 🎄 String lights */
+    .lights{
+      position:absolute;
+      top:12px;
+      left:16px;
+      right:16px;
+      height:34px;
+      pointer-events:none;
+      z-index:2;
+    }
+    .wire{
+      position:absolute;
+      left:0; right:0;
+      top:12px;
+      height:2px;
+      background: rgba(255,255,255,.10);
+      border-radius:999px;
+      transform: skewX(-8deg);
+      opacity:.9;
+    }
+    .bulb{
+      position:absolute;
+      top:4px;
+      width:12px; height:18px;
+      border-radius:999px 999px 14px 14px;
+      box-shadow: 0 0 18px rgba(255,255,255,.10);
+      opacity:.95;
+      animation: twinkle 2.6s ease-in-out infinite;
+    }
+    .bulb::after{
+      content:"";
+      position:absolute;
+      top:-5px; left:50%;
+      transform:translateX(-50%);
+      width:10px; height:7px;
+      border-radius:6px;
+      background: rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.06);
+    }
+    @keyframes twinkle{
+      0%,100%{ filter: brightness(1); transform: translateY(0); }
+      50%{ filter: brightness(1.25); transform: translateY(1px); }
+    }
+
+    /* candy accent line */
     .candyline{
       height:4px;
       border-radius:999px;
-      margin:0 auto 14px;
-      width:min(460px, 92%);
+      margin:38px auto 14px; /* leave space for lights */
+      width:min(520px, 94%);
       background: repeating-linear-gradient(
         45deg,
         rgba(239,68,68,.95) 0 10px,
         rgba(255,255,255,.95) 10px 20px,
-        rgba(34,197,94,.90) 20px 30px,
+        rgba(34,197,94,.92) 20px 30px,
         rgba(255,255,255,.95) 30px 40px
       );
-      box-shadow: 0 0 22px rgba(239,68,68,.18);
-      opacity:.9;
+      box-shadow: 0 0 26px rgba(239,68,68,.18);
+      opacity:.95;
     }
 
     .title{
@@ -164,20 +202,59 @@
       gap:12px;
       margin-bottom: 6px;
       text-align:center;
+      position:relative;
+      z-index:3;
     }
     .srv-icon{
       width:46px;
       height:46px;
       border-radius:14px;
       background: rgba(0,0,0,.25);
-      border:1px solid rgba(43,55,72,.9);
+      border:1px solid rgba(55,70,90,.9);
       box-shadow: 0 12px 30px rgba(0,0,0,.4);
       object-fit: cover;
     }
+
+    /* 🎅 Santa hat (CSS) */
+    .nameWrap{ position:relative; display:inline-block; }
+    .hat{
+      position:absolute;
+      left:-14px;
+      top:-22px;
+      width:46px;
+      height:30px;
+      transform: rotate(-16deg);
+      pointer-events:none;
+    }
+    .hat .cap{
+      position:absolute;
+      bottom:0; left:0;
+      width:46px; height:22px;
+      background: linear-gradient(180deg, rgba(239,68,68,1), rgba(190,28,28,1));
+      border-radius: 18px 24px 10px 10px;
+      box-shadow: 0 10px 24px rgba(239,68,68,.16);
+    }
+    .hat .trim{
+      position:absolute;
+      bottom:-2px; left:-2px;
+      width:52px; height:10px;
+      background: rgba(255,255,255,.92);
+      border-radius:999px;
+      box-shadow: 0 10px 22px rgba(255,255,255,.12);
+    }
+    .hat .pom{
+      position:absolute;
+      right:-6px; top:-2px;
+      width:14px; height:14px;
+      background: rgba(255,255,255,.95);
+      border-radius:999px;
+      box-shadow: 0 10px 20px rgba(255,255,255,.12);
+    }
+
     h1{
       margin:0;
-      font-size:42px;
-      font-weight:1000;
+      font-size:44px;
+      font-weight:1100;
       letter-spacing:-1px;
     }
     .byline{
@@ -185,13 +262,21 @@
       text-align:center;
       color:var(--muted);
       font-size:13px;
+      position:relative;
+      z-index:3;
+    }
+    .byline .x{
+      color: rgba(243,244,246,.92);
+      font-weight:1000;
     }
 
     .section{
       border-radius:16px;
       padding:16px;
       background: var(--card2);
-      border:1px solid var(--border);
+      border:1px solid rgba(55,70,90,.78);
+      position:relative;
+      z-index:3;
     }
 
     .label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
@@ -221,7 +306,7 @@
       gap:8px;
       padding:8px 10px;
       border-radius:999px;
-      border:1px solid var(--border);
+      border:1px solid rgba(55,70,90,.78);
       background: rgba(255,255,255,.03);
       font-size:12.5px;
       color:var(--muted);
@@ -254,15 +339,15 @@
       padding:12px 14px;
       border-radius:14px;
       border:none;
-      font-weight:1000;
+      font-weight:1100;
       background: linear-gradient(90deg, rgba(239,68,68,.95), rgba(34,197,94,.90));
       color:#071018;
       cursor:pointer;
       transition: transform .15s ease, filter .2s ease;
       -webkit-tap-highlight-color: transparent;
-      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      box-shadow: 0 12px 32px rgba(0,0,0,.42);
     }
-    .btn:hover{ filter: brightness(1.05); }
+    .btn:hover{ filter: brightness(1.06); }
     .btn:active{ transform: scale(.97); }
 
     .subbtn{
@@ -270,10 +355,10 @@
       margin-top:10px;
       padding:10px 14px;
       border-radius:14px;
-      border:1px solid var(--border);
+      border:1px solid rgba(55,70,90,.78);
       background: rgba(255,255,255,.04);
       color: var(--text);
-      font-weight:950;
+      font-weight:1000;
       cursor:pointer;
       -webkit-tap-highlight-color: transparent;
       transition: transform .15s ease, background .2s ease;
@@ -285,7 +370,7 @@
       margin-top:12px;
       padding:10px 12px;
       border-radius:14px;
-      border:1px solid var(--border);
+      border:1px solid rgba(55,70,90,.78);
       background: rgba(255,255,255,.03);
       font-size:13px;
       color:var(--muted);
@@ -294,13 +379,12 @@
       gap:10px;
       flex-wrap:wrap;
     }
-    .strong{ color: var(--text); font-weight:1000; }
+    .strong{ color: var(--text); font-weight:1100; }
 
-    /* Player bar */
     .barWrap{
       margin-top:12px;
       border-radius:14px;
-      border:1px solid var(--border);
+      border:1px solid rgba(55,70,90,.78);
       background: rgba(255,255,255,.03);
       padding:10px 12px;
     }
@@ -318,7 +402,7 @@
       border-radius:999px;
       background: rgba(255,255,255,.06);
       overflow:hidden;
-      border:1px solid rgba(43,55,72,.65);
+      border:1px solid rgba(55,70,90,.55);
     }
     .fill{
       height:100%;
@@ -329,19 +413,18 @@
       transition: width .35s ease;
     }
 
-    /* MOTD */
     .motd{
       margin-top:12px;
       padding:12px;
       border-radius:14px;
-      border:1px solid var(--border);
+      border:1px solid rgba(55,70,90,.78);
       background: rgba(255,255,255,.03);
     }
     .motdTitle{
       font-size:13px;
       color: var(--muted);
       margin-bottom:8px;
-      font-weight:1000;
+      font-weight:1100;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -355,12 +438,11 @@
       word-break:break-word;
     }
 
-    /* Toast (fade in/out) */
     .toast{
       margin-top:12px;
       text-align:center;
       font-size:12.5px;
-      color:rgba(169,176,186,.9);
+      color:rgba(169,176,186,.92);
       opacity:0;
       transition:opacity .25s ease;
       min-height:16px;
@@ -371,10 +453,9 @@
       margin-top: 10px;
       text-align:center;
       font-size:12px;
-      color: rgba(169,176,186,.75);
+      color: rgba(169,176,186,.78);
     }
 
-    /* Pages */
     .page{ display:none; }
     .page.active{ display:block; }
 
@@ -402,8 +483,8 @@
       width:100%;
       max-width:520px;
       border-radius:18px;
-      border:1px solid rgba(43,55,72,.85);
-      background: rgba(10,16,28,.92);
+      border:1px solid rgba(55,70,90,.85);
+      background: rgba(10,16,28,.94);
       box-shadow: 0 20px 70px rgba(0,0,0,.65);
       padding:16px;
       animation: pop .18s ease forwards;
@@ -420,14 +501,14 @@
       margin-bottom:10px;
     }
     .modalTitle{
-      font-weight:1100;
+      font-weight:1200;
       letter-spacing:-.2px;
     }
     .closeBtn{
-      border:1px solid rgba(43,55,72,.85);
+      border:1px solid rgba(55,70,90,.85);
       background: rgba(255,255,255,.04);
       color: var(--text);
-      font-weight:1000;
+      font-weight:1100;
       border-radius:12px;
       padding:8px 10px;
       cursor:pointer;
@@ -435,7 +516,7 @@
     }
     .list{
       border-radius:14px;
-      border:1px solid rgba(43,55,72,.8);
+      border:1px solid rgba(55,70,90,.8);
       background: rgba(255,255,255,.03);
       padding:10px;
       max-height: 45vh;
@@ -448,8 +529,8 @@
       justify-content:space-between;
       gap:10px;
     }
-    .player + .player{ border-top: 1px solid rgba(43,55,72,.55); }
-    .pname{ font-weight:1000; }
+    .player + .player{ border-top: 1px solid rgba(55,70,90,.55); }
+    .pname{ font-weight:1100; }
     .puuid{ color: rgba(169,176,186,.85); font-size:12px; }
 
     @media (prefers-reduced-motion: reduce){
@@ -458,6 +539,7 @@
       .statusDot{ animation:none; }
       .btn,.tab,.subbtn,.fill{ transition:none; }
       .modal{ animation:none; }
+      .bulb{ animation:none; }
     }
   </style>
 </head>
@@ -471,15 +553,29 @@
   </div>
 
   <main class="card">
+    <!-- lights -->
+    <div class="lights" aria-hidden="true">
+      <div class="wire"></div>
+      <!-- bulbs injected by JS -->
+      <div id="bulbs"></div>
+    </div>
+
     <div class="candyline"></div>
 
     <!-- HOME -->
     <section class="page" id="pageHome">
       <div class="title">
         <img class="srv-icon" id="srvIcon" alt="Server icon" />
-        <h1>Mnwab</h1>
+        <div class="nameWrap">
+          <div class="hat" aria-hidden="true">
+            <div class="cap"></div>
+            <div class="trim"></div>
+            <div class="pom"></div>
+          </div>
+          <h1>Mnwab</h1>
+        </div>
       </div>
-      <div class="byline">by lnvnl • Merry Christmas 🎄</div>
+      <div class="byline">by <span class="x">lnvnl</span> • Merry Christmas 🎄</div>
 
       <div class="section">
         <div class="label">Server Address (Java)</div>
@@ -594,7 +690,6 @@
   <script>
     const SERVER = "mc.lnvnl.org";
 
-    // Elements
     const favicon = document.getElementById("favicon");
     const srvIcon = document.getElementById("srvIcon");
     const srvIcon2 = document.getElementById("srvIcon2");
@@ -637,11 +732,9 @@
     const playerList = document.getElementById("playerList");
     const modalTitle = document.getElementById("modalTitle");
 
-    // State
     let lastUpdatedAt = null;
     let lastData = null;
 
-    // Toast
     function showToast(msg){
       toast.textContent = msg;
       toast.classList.add("show");
@@ -677,7 +770,6 @@
       setTimeout(() => copyBtn.textContent = "Join / Copy IP", 1200);
     });
 
-    // Routing
     function setActive(page){
       const isStatus = page === "status";
       pageHome.classList.toggle("active", !isStatus);
@@ -694,7 +786,6 @@
     tabStatus.addEventListener("click", () => { location.hash = "#status"; route(); });
     window.addEventListener("hashchange", route);
 
-    // Modal
     function openModal(){
       modalBack.classList.add("show");
       modalBack.setAttribute("aria-hidden", "false");
@@ -717,7 +808,6 @@
       playerList.innerHTML = "";
       const list = lastData?.players?.list || [];
       const online = lastData?.players?.online ?? 0;
-
       modalTitle.textContent = `Players (${online})`;
 
       if(!lastData?.online){
@@ -728,7 +818,6 @@
         playerList.innerHTML = `<div class="player"><div class="pname">No player list available</div><div class="puuid">Some servers hide it</div></div>`;
         return;
       }
-
       for(const p of list){
         const row = document.createElement("div");
         row.className = "player";
@@ -746,7 +835,6 @@
     playersBtnHome.addEventListener("click", () => { renderPlayers(); openModal(); });
     playersBtnStatus.addEventListener("click", () => { renderPlayers(); openModal(); });
 
-    // Fetch helpers
     async function fetchJsonWithTimeout(url, ms=6500){
       const controller = new AbortController();
       const t = setTimeout(() => controller.abort(), ms);
@@ -865,7 +953,6 @@
       }
     }
 
-    // Icon + favicon
     function setIcon(){
       const url = `https://api.mcsrvstat.us/icon/${SERVER}`;
       srvIcon.src = url;
@@ -875,33 +962,45 @@
       srvIcon2.onerror = () => srvIcon2.style.display = "none";
     }
 
-    // Snow (slightly more sparkly)
     function makeSnow(){
       const container = document.getElementById("snow");
       const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if(reduceMotion) return;
 
-      const count = 80;
+      const count = 95; // more festive
       for(let i=0;i<count;i++){
         const f = document.createElement("div");
         f.className = "flake";
-
-        const size = 2.2 + Math.random()*4.2;
-        const left = Math.random()*100;
-        const duration = 9 + Math.random()*11;
-        const delay = Math.random()*10;
-        const opacity = 0.25 + Math.random()*0.65;
-        const drift = (Math.random()*50 - 25) + "px";
-
+        const size = 2.0 + Math.random()*4.8;
         f.style.width = size + "px";
         f.style.height = size + "px";
-        f.style.left = left + "%";
-        f.style.opacity = opacity;
-        f.style.setProperty("--drift", drift);
-        f.style.animationDuration = duration + "s";
-        f.style.animationDelay = delay + "s";
-
+        f.style.left = (Math.random()*100) + "%";
+        f.style.opacity = (0.22 + Math.random()*0.70);
+        f.style.animationDuration = (8 + Math.random()*12) + "s";
+        f.style.animationDelay = (Math.random()*10) + "s";
+        f.style.setProperty("--drift", (Math.random()*60 - 30) + "px");
         container.appendChild(f);
+      }
+    }
+
+    function makeLights(){
+      const holder = document.getElementById("bulbs");
+      const colors = [
+        "rgba(239,68,68,.95)",   // red
+        "rgba(34,197,94,.95)",   // green
+        "rgba(251,191,36,.95)",  // gold
+        "rgba(255,255,255,.95)"  // white
+      ];
+      const count = 14;
+      for(let i=0;i<count;i++){
+        const b = document.createElement("div");
+        b.className = "bulb";
+        b.style.left = (i*(100/(count-1))) + "%";
+        b.style.transform = "translateX(-50%)";
+        b.style.background = colors[i % colors.length];
+        b.style.animationDelay = (Math.random()*1.8) + "s";
+        b.style.boxShadow = `0 0 22px ${colors[i % colors.length]}`;
+        holder.appendChild(b);
       }
     }
 
@@ -909,6 +1008,7 @@
     route();
     setIcon();
     makeSnow();
+    makeLights();
     loadStatus();
     loadLatest();
 
