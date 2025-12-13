@@ -1,379 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mnwab 🎄</title>
-<meta name="theme-color" content="#05070c">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#05070c" />
+  <title>Mnwab 🎄</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Pixel font ONLY for the server address -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-<style>
-:root{
-  --bg:#05070c;
-  --card:#0c1422;
-  --text:#f3f4f6;
-  --muted:#a1a7b0;
-  --border:rgba(70,85,110,.7);
+  <link id="favicon" rel="icon" href="" />
 
-  --red:#ef4444;
-  --green:#22c55e;
-  --gold:#fbbf24;
+  <style>
+    :root{
+      --bg:#05070c;
+      --text:#f3f4f6;
+      --muted:#a9b0ba;
+      --border: rgba(55,70,90,.82);
 
-  --good:#34d399;
-}
+      --card: rgba(10,16,28,.86);
+      --card2: rgba(0,0,0,.25);
 
-/* Reset */
-*{box-sizing:border-box}
-html,body{height:100%}
+      --good:#34d399;
+      --bad:#fb7185;
+      --warn:#fbbf24;
 
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  color:var(--text);
-  display:grid;
-  place-items:center;
-  padding:24px;
-  overflow:hidden;
-  background:
-    radial-gradient(900px 500px at 15% 10%, rgba(239,68,68,.14), transparent 60%),
-    radial-gradient(900px 500px at 85% 20%, rgba(34,197,94,.12), transparent 60%),
-    radial-gradient(1200px 700px at 50% 110%, rgba(251,191,36,.10), transparent 70%),
-    var(--bg);
-}
+      --red:#ef4444;
+      --green:#22c55e;
+      --gold:#fbbf24;
 
-/* ❄️ Snow */
-.snow,.snow2{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:0;
-}
-.snow2{opacity:.75}
-
-.flake{
-  position:absolute;
-  top:-12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.75);
-  filter:blur(.15px);
-  animation:fall linear infinite;
-}
-@keyframes fall{
-  to{transform:translate(var(--drift),110dvh)}
-}
-
-/* 🎄 CARD */
-.card{
-  position:relative;
-  width:100%;
-  max-width:680px;
-  padding:28px;
-  border-radius:26px;
-  background:rgba(12,20,34,.82);
-  border:1px solid var(--border);
-  backdrop-filter:blur(12px);
-  box-shadow:0 30px 90px rgba(0,0,0,.75);
-  overflow:hidden;
-  z-index:1;
-}
-
-/* 🌟 FULL CARD GLOW (NO CUT) */
-.card::before{
-  content:"";
-  position:absolute;
-  inset:-120px;
-  border-radius:inherit;
-  z-index:0;
-  pointer-events:none;
-  background:
-    radial-gradient(900px 520px at 15% 15%, rgba(239,68,68,.22), transparent 60%),
-    radial-gradient(900px 520px at 85% 18%, rgba(34,197,94,.20), transparent 62%),
-    radial-gradient(1000px 620px at 50% 95%, rgba(251,191,36,.14), transparent 72%);
-  filter:blur(26px);
-  opacity:.95;
-}
-
-/* keep content above glow */
-.card > *{
-  position:relative;
-  z-index:1;
-}
-
-/* 🎄 Lights */
-.lights{
-  position:absolute;
-  top:12px;
-  left:18px;
-  right:18px;
-  height:42px;
-}
-.wire{
-  position:absolute;
-  top:16px;
-  left:0;right:0;
-  height:2px;
-  background:rgba(255,255,255,.15);
-  border-radius:999px;
-}
-.bulb{
-  position:absolute;
-  top:6px;
-  width:14px;height:22px;
-  border-radius:999px 999px 16px 16px;
-  animation:twinkle 1.8s ease-in-out infinite;
-}
-.bulb::after{
-  content:"";
-  position:absolute;
-  inset:-12px;
-  background:radial-gradient(circle, rgba(255,255,255,.45), transparent 65%);
-  filter:blur(2px);
-}
-@keyframes twinkle{
-  0%,100%{filter:brightness(1)}
-  50%{filter:brightness(1.5)}
-}
-
-/* candy cane divider */
-.candy{
-  margin:56px auto 18px;
-  height:6px;
-  width:95%;
-  max-width:560px;
-  border-radius:999px;
-  background:repeating-linear-gradient(
-    45deg,
-    var(--red) 0 10px,
-    white 10px 20px,
-    var(--green) 20px 30px,
-    white 30px 40px
-  );
-  box-shadow:0 0 30px rgba(239,68,68,.3);
-}
-
-/* Header */
-.title{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  text-align:center;
-}
-.icon{
-  width:48px;height:48px;
-  border-radius:14px;
-}
-.nameWrap{
-  position:relative;
-}
-h1{
-  margin:0;
-  font-size:46px;
-  font-weight:900;
-}
-
-/* 🎅 Hat */
-.hat{
-  position:absolute;
-  left:-18px;
-  top:-26px;
-  width:54px;height:34px;
-  transform:rotate(-16deg);
-}
-.hat .cap{
-  position:absolute;
-  bottom:0;
-  width:54px;height:26px;
-  background:linear-gradient(#ef4444,#b91c1c);
-  border-radius:20px 28px 14px 14px;
-}
-.hat .trim{
-  position:absolute;
-  bottom:-2px;
-  left:-2px;
-  width:60px;height:12px;
-  background:white;
-  border-radius:999px;
-}
-.hat .pom{
-  position:absolute;
-  right:-8px;
-  top:-4px;
-  width:16px;height:16px;
-  background:white;
-  border-radius:999px;
-}
-
-/* content */
-.byline{
-  margin:8px 0 22px;
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.section{
-  background:rgba(0,0,0,.28);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:18px;
-}
-
-.label{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:10px;
-}
-
-.row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.ip{
-  font-family:"Press Start 2P", monospace;
-  font-size:14px;
-}
-
-.badge{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.05);
-  border:1px solid var(--border);
-  font-size:13px;
-}
-.dot{
-  width:10px;height:10px;
-  border-radius:50%;
-  background:var(--good);
-  box-shadow:0 0 14px rgba(52,211,153,.6);
-}
-
-.btn{
-  margin-top:14px;
-  width:100%;
-  padding:14px;
-  border-radius:16px;
-  border:none;
-  font-weight:900;
-  background:linear-gradient(90deg,var(--red),var(--green));
-  color:#071018;
-  cursor:pointer;
-}
-
-.toast{
-  margin-top:12px;
-  text-align:center;
-  font-size:12.5px;
-  opacity:0;
-  transition:opacity .25s ease;
-}
-.toast.show{opacity:1}
-
-.footer{
-  margin-top:12px;
-  text-align:center;
-  font-size:12px;
-  color:rgba(160,170,185,.7);
-}
-</style>
-</head>
-
-<body>
-
-<div class="snow" id="snow"></div>
-<div class="snow2" id="snow2"></div>
-
-<main class="card">
-  <div class="lights">
-    <div class="wire"></div>
-    <div id="bulbs"></div>
-  </div>
-
-  <div class="candy"></div>
-
-  <div class="title">
-    <img class="icon" src="https://api.mcsrvstat.us/icon/mc.lnvnl.org">
-    <div class="nameWrap">
-      <div class="hat">
-        <div class="cap"></div><div class="trim"></div><div class="pom"></div>
-      </div>
-      <h1>Mnwab</h1>
-    </div>
-  </div>
-
-  <div class="byline">by lnvnl 🎄</div>
-
-  <div class="section">
-    <div class="label">Server Address (Java)</div>
-    <div class="row">
-      <div class="ip">mc.lnvnl.org</div>
-      <div class="badge"><span class="dot"></span>Online</div>
-    </div>
-
-    <button class="btn" id="copyBtn">Join / Copy IP</button>
-    <div class="toast" id="toast">Copied to clipboard</div>
-
-    <div class="footer">Multiplayer → Add Server → paste the address</div>
-  </div>
-</main>
-
-<script>
-const SERVER="mc.lnvnl.org";
-const btn=document.getElementById("copyBtn");
-const toast=document.getElementById("toast");
-
-btn.onclick=async()=>{
-  try{
-    await navigator.clipboard.writeText(SERVER);
-    toast.classList.add("show");
-    setTimeout(()=>toast.classList.remove("show"),900);
-  }catch{}
-};
-
-/* snow */
-function makeSnow(id,count,min,max,minD,maxD,drift){
-  const c=document.getElementById(id);
-  for(let i=0;i<count;i++){
-    const f=document.createElement("div");
-    f.className="flake";
-    const s=min+Math.random()*(max-min);
-    f.style.width=f.style.height=s+"px";
-    f.style.left=Math.random()*100+"%";
-    f.style.animationDuration=(minD+Math.random()*(maxD-minD))+"s";
-    f.style.animationDelay=Math.random()*10+"s";
-    f.style.setProperty("--drift",(Math.random()*drift-drift/2)+"px");
-    c.appendChild(f);
-  }
-}
-makeSnow("snow",80,2,4,12,22,60);
-makeSnow("snow2",45,3,6,8,14,90);
-
-/* lights */
-const colors=["#ef4444","#22c55e","#fbbf24","#ffffff"];
-const bulbs=document.getElementById("bulbs");
-for(let i=0;i<16;i++){
-  const b=document.createElement("div");
-  b.className="bulb";
-  b.style.left=(i*(100/15))+"%";
-  b.style.transform="translateX(-50%)";
-  b.style.background=colors[i%colors.length];
-  b.style.animationDelay=(Math.random()*1.5)+"s";
-  bulbs.appendChild(b);
-}
-</script>
-
-</body>
-</html>      --snow: rgba(255,255,255,.78);
+      --snow: rgba(255,255,255,.78);
     }
 
     *{ box-sizing:border-box }
@@ -390,7 +48,7 @@ for(let i=0;i<16;i++){
       padding:24px;
       overflow:hidden;
       background:
-        radial-gradient(1100px 680px at 18% 12%, rgba(239,68,68,.18), transparent 62%),
+        radial-gradient(1100px 680px at 18% 12%, rgba(239,68,68,.16), transparent 62%),
         radial-gradient(900px 620px at 82% 28%, rgba(34,197,94,.14), transparent 62%),
         radial-gradient(1100px 760px at 50% 105%, rgba(251,191,36,.10), transparent 72%),
         var(--bg);
@@ -401,7 +59,7 @@ for(let i=0;i<16;i++){
       position:fixed; inset:0;
       pointer-events:none;
       z-index:0;
-      opacity:.65;
+      opacity:.55;
     }
     .sp{
       position:absolute;
@@ -412,9 +70,58 @@ for(let i=0;i<16;i++){
       filter: blur(.2px);
     }
     @keyframes twinkle2{
-      0%,100%{ opacity:.15; transform: scale(1); }
+      0%,100%{ opacity:.12; transform: scale(1); }
       50%{ opacity:.55; transform: scale(1.35); }
     }
+
+    /* 🎁 Super subtle gift confetti */
+    .confetti{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:0;
+      opacity:.32;
+    }
+    .gift{
+      position:absolute;
+      top:-30px;
+      width:10px; height:10px;
+      border-radius:3px;
+      background: rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.10);
+      animation: giftFall linear infinite;
+      filter: blur(.05px);
+    }
+    .gift::after{
+      content:"";
+      position:absolute;
+      inset:3px;
+      border-radius:2px;
+      background: rgba(255,255,255,.10);
+    }
+    @keyframes giftFall{
+      to{ transform: translate(var(--drift), 120dvh) rotate(220deg); }
+    }
+
+    /* ❄️ Snow layers */
+    .snow, .snow2{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+    }
+    .snow2{ z-index:2; opacity:.75; }
+
+    .flake{
+      position:absolute;
+      top:-12px;
+      border-radius:999px;
+      background: var(--snow);
+      filter: blur(.15px);
+      animation: fall linear infinite;
+      will-change: transform;
+      opacity:.5;
+    }
+    @keyframes fall{ to{ transform: translate(var(--drift), 110dvh); } }
 
     /* Top nav */
     .topbar{
@@ -422,7 +129,7 @@ for(let i=0;i<16;i++){
       top:14px;
       left:50%;
       transform:translateX(-50%);
-      z-index:5;
+      z-index:6;
       display:flex;
       gap:10px;
       padding:8px;
@@ -453,56 +160,7 @@ for(let i=0;i<16;i++){
       border:1px solid rgba(255,255,255,.06);
     }
 
-    /* ❄️ Snow layers */
-    .snow, .snow2{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:1;
-    }
-    .snow2{ z-index:2; opacity:.75; }
-
-    .flake{
-      position:absolute;
-      top:-12px;
-      border-radius:999px;
-      background: var(--snow);
-      filter: blur(.12px);
-      animation: fall linear infinite;
-      will-change: transform;
-      box-shadow: 0 0 14px rgba(255,255,255,.16);
-    }
-    @keyframes fall{ to{ transform: translate(var(--drift), 110dvh); } }
-
-    /* 🎁 Gift confetti (super subtle) */
-    .confetti{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:0;
-      opacity:.35;
-    }
-    .gift{
-      position:absolute;
-      top:-30px;
-      width:10px; height:10px;
-      border-radius:3px;
-      background: rgba(255,255,255,.18);
-      border:1px solid rgba(255,255,255,.10);
-      animation: giftFall linear infinite;
-      filter: blur(.05px);
-    }
-    .gift::after{
-      content:"";
-      position:absolute;
-      inset:3px;
-      border-radius:2px;
-      background: rgba(255,255,255,.12);
-    }
-    @keyframes giftFall{
-      to{ transform: translate(var(--drift), 120dvh) rotate(220deg); }
-    }
-
+    /* Card */
     .card{
       position:relative;
       z-index:4;
@@ -514,28 +172,31 @@ for(let i=0;i<16;i++){
       border:1px solid rgba(55,70,90,.86);
       box-shadow:0 26px 90px rgba(0,0,0,.72);
       backdrop-filter: blur(10px);
-      animation: fadeUp .6s ease forwards;
       overflow:hidden;
+      animation: fadeUp .6s ease forwards;
     }
     @keyframes fadeUp{
       from{opacity:0; transform:translateY(14px)}
       to{opacity:1; transform:translateY(0)}
     }
 
-    /* 🎄 Wreath glow behind content */
-    .wreathGlow{
+    /* ✅ FULL-CARD GLOW (no cutoff line) */
+    .card::before{
+      content:"";
       position:absolute;
-      inset:-140px -140px auto -140px;
-      height:320px;
-      background:
-        radial-gradient(circle at 50% 55%, rgba(34,197,94,.18), transparent 55%),
-        radial-gradient(circle at 50% 55%, rgba(239,68,68,.12), transparent 60%),
-        radial-gradient(circle at 50% 55%, rgba(251,191,36,.10), transparent 65%);
-      filter: blur(2px);
-      opacity:.95;
+      inset:-120px;                 /* extend past edges */
+      border-radius:inherit;
       pointer-events:none;
       z-index:0;
+      background:
+        radial-gradient(900px 520px at 18% 12%, rgba(239,68,68,.22), transparent 60%),
+        radial-gradient(900px 520px at 82% 16%, rgba(34,197,94,.18), transparent 62%),
+        radial-gradient(1100px 760px at 50% 95%, rgba(251,191,36,.14), transparent 72%);
+      filter: blur(26px);
+      opacity:.95;
+      transform: scale(1.08);
     }
+    .card > *{ position:relative; z-index:1; }
 
     /* 🎄 String lights */
     .lights{
@@ -562,26 +223,15 @@ for(let i=0;i<16;i++){
       top:6px;
       width:14px; height:22px;
       border-radius:999px 999px 16px 16px;
-      opacity:1;
       animation: twinkle 1.8s ease-in-out infinite;
       will-change: filter, transform;
     }
     .bulb::after{
       content:"";
       position:absolute;
-      top:-6px; left:50%;
-      transform:translateX(-50%);
-      width:12px; height:8px;
-      border-radius:7px;
-      background: rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.06);
-    }
-    .bulb::before{
-      content:"";
-      position:absolute;
       inset:-12px -14px;
-      background: radial-gradient(circle, rgba(255,255,255,.28), transparent 60%);
-      opacity:.9;
+      background: radial-gradient(circle, rgba(255,255,255,.30), transparent 60%);
+      opacity:.95;
       filter: blur(1px);
     }
     @keyframes twinkle{
@@ -593,7 +243,7 @@ for(let i=0;i<16;i++){
     .candyline{
       height:5px;
       border-radius:999px;
-      margin:54px auto 14px; /* space for lights */
+      margin:54px auto 14px; /* room for lights */
       width:min(560px, 95%);
       background: repeating-linear-gradient(
         45deg,
@@ -613,8 +263,6 @@ for(let i=0;i<16;i++){
       gap:12px;
       margin-bottom: 6px;
       text-align:center;
-      position:relative;
-      z-index:4;
     }
     .srv-icon{
       width:46px;
@@ -626,7 +274,7 @@ for(let i=0;i<16;i++){
       object-fit: cover;
     }
 
-    /* 🎅 Santa hat (CSS) */
+    /* 🎅 Santa hat */
     .nameWrap{ position:relative; display:inline-block; }
     .hat{
       position:absolute;
@@ -643,7 +291,6 @@ for(let i=0;i<16;i++){
       width:52px; height:25px;
       background: linear-gradient(180deg, rgba(239,68,68,1), rgba(170,18,18,1));
       border-radius: 20px 28px 12px 12px;
-      box-shadow: 0 12px 26px rgba(239,68,68,.20);
     }
     .hat .trim{
       position:absolute;
@@ -651,7 +298,6 @@ for(let i=0;i<16;i++){
       width:58px; height:11px;
       background: rgba(255,255,255,.94);
       border-radius:999px;
-      box-shadow: 0 10px 22px rgba(255,255,255,.14);
     }
     .hat .pom{
       position:absolute;
@@ -659,7 +305,6 @@ for(let i=0;i<16;i++){
       width:15px; height:15px;
       background: rgba(255,255,255,.96);
       border-radius:999px;
-      box-shadow: 0 10px 20px rgba(255,255,255,.14);
     }
 
     h1{
@@ -673,21 +318,14 @@ for(let i=0;i<16;i++){
       text-align:center;
       color:var(--muted);
       font-size:13px;
-      position:relative;
-      z-index:4;
     }
-    .byline .x{
-      color: rgba(243,244,246,.95);
-      font-weight:1100;
-    }
+    .byline .x{ color: rgba(243,244,246,.95); font-weight:1100; }
 
     .section{
       border-radius:16px;
       padding:16px;
       background: var(--card2);
       border:1px solid rgba(55,70,90,.78);
-      position:relative;
-      z-index:4;
     }
 
     .label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
@@ -817,8 +455,8 @@ for(let i=0;i<16;i++){
       height:100%;
       width:0%;
       border-radius:999px;
-      background: var(--accent);
-      box-shadow: 0 0 18px var(--accentSoft);
+      background: rgba(34,197,94,.62);
+      box-shadow: 0 0 18px rgba(34,197,94,.25);
       transition: width .35s ease;
     }
 
@@ -847,16 +485,21 @@ for(let i=0;i<16;i++){
       word-break:break-word;
     }
 
+    /* ✅ Toast quick fade in/out */
     .toast{
       margin-top:12px;
       text-align:center;
       font-size:12.5px;
       color:rgba(169,176,186,.92);
-      opacity:0;
-      transition:opacity .25s ease;
       min-height:16px;
+      opacity:0;
+      transform: translateY(2px);
+      transition: opacity .18s ease, transform .18s ease;
     }
-    .toast.show{ opacity:1; }
+    .toast.show{
+      opacity:1;
+      transform: translateY(0);
+    }
 
     .footer{
       margin-top: 10px;
@@ -880,7 +523,7 @@ for(let i=0;i<16;i++){
       inset:0;
       background: rgba(0,0,0,.55);
       display:none;
-      z-index:6;
+      z-index:7;
       align-items:center;
       justify-content:center;
       padding:20px;
@@ -961,8 +604,6 @@ for(let i=0;i<16;i++){
   </div>
 
   <main class="card">
-    <div class="wreathGlow" aria-hidden="true"></div>
-
     <div class="lights" aria-hidden="true">
       <div class="wire"></div>
       <div id="bulbs"></div>
@@ -1175,7 +816,7 @@ for(let i=0;i<16;i++){
       const ok = await copyText(SERVER);
       copyBtn.textContent = ok ? "Copied ✓" : "Copy failed";
       showToast(ok ? "Copied to clipboard" : "Copy blocked");
-      setTimeout(() => copyBtn.textContent = "Join / Copy IP", 1200);
+      setTimeout(() => copyBtn.textContent = "Join / Copy IP", 1150);
     });
 
     function setActive(page){
@@ -1382,7 +1023,7 @@ for(let i=0;i<16;i++){
         f.style.width = size + "px";
         f.style.height = size + "px";
         f.style.left = (Math.random()*100) + "%";
-        f.style.opacity = (0.18 + Math.random()*0.75);
+        f.style.opacity = (0.16 + Math.random()*0.70);
         f.style.animationDuration = (minDur + Math.random()*(maxDur-minDur)) + "s";
         f.style.animationDelay = (Math.random()*10) + "s";
         f.style.setProperty("--drift", (Math.random()*drift - drift/2) + "px");
@@ -1407,7 +1048,6 @@ for(let i=0;i<16;i++){
         const c = colors[i % colors.length];
         b.style.background = c;
         b.style.animationDelay = (Math.random()*1.4) + "s";
-        b.style.boxShadow = `0 0 30px ${c}`;
         holder.appendChild(b);
       }
     }
@@ -1440,18 +1080,19 @@ for(let i=0;i<16;i++){
         "rgba(251,191,36,.20)",
         "rgba(255,255,255,.14)"
       ];
-      const count = 14; // subtle
+      const count = 14;
       for(let i=0;i<count;i++){
         const g = document.createElement("div");
         g.className = "gift";
         g.style.left = (Math.random()*100) + "%";
-        g.style.opacity = (0.12 + Math.random()*0.22);
+        g.style.opacity = (0.10 + Math.random()*0.20);
         g.style.animationDuration = (18 + Math.random()*16) + "s";
         g.style.animationDelay = (Math.random()*10) + "s";
         g.style.setProperty("--drift", (Math.random()*90 - 45) + "px");
         g.style.background = colors[i % colors.length];
-        g.style.width = (8 + Math.random()*8) + "px";
-        g.style.height = g.style.width;
+        const size = (8 + Math.random()*8);
+        g.style.width = size + "px";
+        g.style.height = size + "px";
         c.appendChild(g);
       }
     }
@@ -1459,12 +1100,10 @@ for(let i=0;i<16;i++){
     // Init
     route();
     setIcon();
-
     makeSparkles();
     makeGifts();
     makeLights();
 
-    // layered snow: back small, front bigger
     makeSnow("snow", 95, 1.8, 4.4, 10, 20, 70);
     makeSnow("snow2", 55, 3.2, 6.4, 8, 14, 90);
 
