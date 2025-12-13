@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#05070c" />
-  <title>Mnwab • Christmas</title>
+  <title>Mnwab 🎄</title>
 
   <!-- Pixel font for IP only -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,13 +15,13 @@
 
   <style>
     :root{
-      --bg:#05070c;
+      --bg:#04060b;
       --text:#f3f4f6;
       --muted:#a9b0ba;
       --border: rgba(55,70,90,.82);
 
-      --card: rgba(10,16,28,.80);
-      --card2: rgba(0,0,0,.24);
+      --card: rgba(10,16,28,.82);
+      --card2: rgba(0,0,0,.25);
 
       --good:#34d399;
       --bad:#fb7185;
@@ -31,11 +31,10 @@
       --xgreen:#22c55e;
       --xgold:#fbbf24;
 
-      --glowR:255; --glowG:90; --glowB:90;
-      --accent: rgba(34,197,94,.60);
-      --accentSoft: rgba(34,197,94,.22);
+      --accent: rgba(34,197,94,.62);
+      --accentSoft: rgba(34,197,94,.25);
 
-      --snow: rgba(255,255,255,.72);
+      --snow: rgba(255,255,255,.78);
     }
 
     *{ box-sizing:border-box }
@@ -52,10 +51,30 @@
       padding:24px;
       overflow:hidden;
       background:
-        radial-gradient(950px 520px at 20% 10%, rgba(var(--glowR),var(--glowG),var(--glowB),.16), transparent 62%),
-        radial-gradient(780px 560px at 80% 30%, rgba(34,197,94,.10), transparent 62%),
-        radial-gradient(920px 680px at 50% 100%, rgba(251,191,36,.08), transparent 72%),
+        radial-gradient(1100px 680px at 18% 12%, rgba(239,68,68,.18), transparent 62%),
+        radial-gradient(900px 620px at 82% 28%, rgba(34,197,94,.14), transparent 62%),
+        radial-gradient(1100px 760px at 50% 105%, rgba(251,191,36,.10), transparent 72%),
         var(--bg);
+    }
+
+    /* ✨ Sparkles */
+    .sparkles{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:0;
+      opacity:.65;
+    }
+    .sp{
+      position:absolute;
+      width:2px; height:2px;
+      border-radius:999px;
+      background: rgba(255,255,255,.35);
+      animation: twinkle2 4.2s ease-in-out infinite;
+      filter: blur(.2px);
+    }
+    @keyframes twinkle2{
+      0%,100%{ opacity:.15; transform: scale(1); }
+      50%{ opacity:.55; transform: scale(1.35); }
     }
 
     /* Top nav */
@@ -64,7 +83,7 @@
       top:14px;
       left:50%;
       transform:translateX(-50%);
-      z-index:3;
+      z-index:5;
       display:flex;
       gap:10px;
       padding:8px;
@@ -90,18 +109,20 @@
     .tab:hover{ background: rgba(255,255,255,.06); }
     .tab:active{ transform: scale(.98); }
     .tab.active{
-      background: linear-gradient(90deg, rgba(239,68,68,.18), rgba(34,197,94,.14));
+      background: linear-gradient(90deg, rgba(239,68,68,.22), rgba(34,197,94,.18));
       opacity:1;
       border:1px solid rgba(255,255,255,.06);
     }
 
-    /* ❄️ Snow */
-    .snow{
+    /* ❄️ Snow layers */
+    .snow, .snow2{
       position:fixed;
       inset:0;
       pointer-events:none;
-      z-index:0;
+      z-index:1;
     }
+    .snow2{ z-index:2; opacity:.75; }
+
     .flake{
       position:absolute;
       top:-12px;
@@ -110,21 +131,49 @@
       filter: blur(.12px);
       animation: fall linear infinite;
       will-change: transform;
-      opacity:.6;
-      box-shadow: 0 0 12px rgba(255,255,255,.14);
+      box-shadow: 0 0 14px rgba(255,255,255,.16);
     }
     @keyframes fall{ to{ transform: translate(var(--drift), 110dvh); } }
 
+    /* 🎁 Gift confetti (super subtle) */
+    .confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      opacity:.35;
+    }
+    .gift{
+      position:absolute;
+      top:-30px;
+      width:10px; height:10px;
+      border-radius:3px;
+      background: rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.10);
+      animation: giftFall linear infinite;
+      filter: blur(.05px);
+    }
+    .gift::after{
+      content:"";
+      position:absolute;
+      inset:3px;
+      border-radius:2px;
+      background: rgba(255,255,255,.12);
+    }
+    @keyframes giftFall{
+      to{ transform: translate(var(--drift), 120dvh) rotate(220deg); }
+    }
+
     .card{
       position:relative;
-      z-index:1;
+      z-index:4;
       width:100%;
-      max-width:660px;
-      border-radius:24px;
+      max-width:700px;
+      border-radius:26px;
       padding:26px;
       background: var(--card);
       border:1px solid rgba(55,70,90,.86);
-      box-shadow:0 24px 80px rgba(0,0,0,.68);
+      box-shadow:0 26px 90px rgba(0,0,0,.72);
       backdrop-filter: blur(10px);
       animation: fadeUp .6s ease forwards;
       overflow:hidden;
@@ -134,65 +183,88 @@
       to{opacity:1; transform:translateY(0)}
     }
 
+    /* 🎄 Wreath glow behind content */
+    .wreathGlow{
+      position:absolute;
+      inset:-140px -140px auto -140px;
+      height:320px;
+      background:
+        radial-gradient(circle at 50% 55%, rgba(34,197,94,.18), transparent 55%),
+        radial-gradient(circle at 50% 55%, rgba(239,68,68,.12), transparent 60%),
+        radial-gradient(circle at 50% 55%, rgba(251,191,36,.10), transparent 65%);
+      filter: blur(2px);
+      opacity:.95;
+      pointer-events:none;
+      z-index:0;
+    }
+
     /* 🎄 String lights */
     .lights{
       position:absolute;
-      top:12px;
+      top:10px;
       left:16px;
       right:16px;
-      height:34px;
+      height:44px;
       pointer-events:none;
-      z-index:2;
+      z-index:3;
     }
     .wire{
       position:absolute;
       left:0; right:0;
-      top:12px;
+      top:16px;
       height:2px;
-      background: rgba(255,255,255,.10);
+      background: rgba(255,255,255,.12);
       border-radius:999px;
-      transform: skewX(-8deg);
-      opacity:.9;
+      transform: skewX(-10deg);
+      opacity:.95;
     }
     .bulb{
       position:absolute;
-      top:4px;
-      width:12px; height:18px;
-      border-radius:999px 999px 14px 14px;
-      box-shadow: 0 0 18px rgba(255,255,255,.10);
-      opacity:.95;
-      animation: twinkle 2.6s ease-in-out infinite;
+      top:6px;
+      width:14px; height:22px;
+      border-radius:999px 999px 16px 16px;
+      opacity:1;
+      animation: twinkle 1.8s ease-in-out infinite;
+      will-change: filter, transform;
     }
     .bulb::after{
       content:"";
       position:absolute;
-      top:-5px; left:50%;
+      top:-6px; left:50%;
       transform:translateX(-50%);
-      width:10px; height:7px;
-      border-radius:6px;
+      width:12px; height:8px;
+      border-radius:7px;
       background: rgba(255,255,255,.14);
       border:1px solid rgba(255,255,255,.06);
     }
+    .bulb::before{
+      content:"";
+      position:absolute;
+      inset:-12px -14px;
+      background: radial-gradient(circle, rgba(255,255,255,.28), transparent 60%);
+      opacity:.9;
+      filter: blur(1px);
+    }
     @keyframes twinkle{
-      0%,100%{ filter: brightness(1); transform: translateY(0); }
-      50%{ filter: brightness(1.25); transform: translateY(1px); }
+      0%,100%{ filter: brightness(1); transform: translateY(0) scale(1); }
+      50%{ filter: brightness(1.45); transform: translateY(1px) scale(1.03); }
     }
 
     /* candy accent line */
     .candyline{
-      height:4px;
+      height:5px;
       border-radius:999px;
-      margin:38px auto 14px; /* leave space for lights */
-      width:min(520px, 94%);
+      margin:54px auto 14px; /* space for lights */
+      width:min(560px, 95%);
       background: repeating-linear-gradient(
         45deg,
-        rgba(239,68,68,.95) 0 10px,
-        rgba(255,255,255,.95) 10px 20px,
-        rgba(34,197,94,.92) 20px 30px,
-        rgba(255,255,255,.95) 30px 40px
+        rgba(239,68,68,.98) 0 10px,
+        rgba(255,255,255,.98) 10px 20px,
+        rgba(34,197,94,.95) 20px 30px,
+        rgba(255,255,255,.98) 30px 40px
       );
-      box-shadow: 0 0 26px rgba(239,68,68,.18);
-      opacity:.95;
+      box-shadow: 0 0 30px rgba(239,68,68,.22);
+      opacity:.98;
     }
 
     .title{
@@ -203,7 +275,7 @@
       margin-bottom: 6px;
       text-align:center;
       position:relative;
-      z-index:3;
+      z-index:4;
     }
     .srv-icon{
       width:46px;
@@ -219,42 +291,42 @@
     .nameWrap{ position:relative; display:inline-block; }
     .hat{
       position:absolute;
-      left:-14px;
-      top:-22px;
-      width:46px;
-      height:30px;
+      left:-16px;
+      top:-24px;
+      width:52px;
+      height:34px;
       transform: rotate(-16deg);
       pointer-events:none;
     }
     .hat .cap{
       position:absolute;
       bottom:0; left:0;
-      width:46px; height:22px;
-      background: linear-gradient(180deg, rgba(239,68,68,1), rgba(190,28,28,1));
-      border-radius: 18px 24px 10px 10px;
-      box-shadow: 0 10px 24px rgba(239,68,68,.16);
+      width:52px; height:25px;
+      background: linear-gradient(180deg, rgba(239,68,68,1), rgba(170,18,18,1));
+      border-radius: 20px 28px 12px 12px;
+      box-shadow: 0 12px 26px rgba(239,68,68,.20);
     }
     .hat .trim{
       position:absolute;
       bottom:-2px; left:-2px;
-      width:52px; height:10px;
-      background: rgba(255,255,255,.92);
+      width:58px; height:11px;
+      background: rgba(255,255,255,.94);
       border-radius:999px;
-      box-shadow: 0 10px 22px rgba(255,255,255,.12);
+      box-shadow: 0 10px 22px rgba(255,255,255,.14);
     }
     .hat .pom{
       position:absolute;
-      right:-6px; top:-2px;
-      width:14px; height:14px;
-      background: rgba(255,255,255,.95);
+      right:-7px; top:-3px;
+      width:15px; height:15px;
+      background: rgba(255,255,255,.96);
       border-radius:999px;
-      box-shadow: 0 10px 20px rgba(255,255,255,.12);
+      box-shadow: 0 10px 20px rgba(255,255,255,.14);
     }
 
     h1{
       margin:0;
-      font-size:44px;
-      font-weight:1100;
+      font-size:46px;
+      font-weight:1200;
       letter-spacing:-1px;
     }
     .byline{
@@ -263,11 +335,11 @@
       color:var(--muted);
       font-size:13px;
       position:relative;
-      z-index:3;
+      z-index:4;
     }
     .byline .x{
-      color: rgba(243,244,246,.92);
-      font-weight:1000;
+      color: rgba(243,244,246,.95);
+      font-weight:1100;
     }
 
     .section{
@@ -276,11 +348,10 @@
       background: var(--card2);
       border:1px solid rgba(55,70,90,.78);
       position:relative;
-      z-index:3;
+      z-index:4;
     }
 
     .label{ color:var(--muted); font-size:13px; margin-bottom:8px; }
-
     .row{
       display:flex;
       align-items:center;
@@ -289,7 +360,6 @@
       flex-wrap:wrap;
     }
 
-    /* Minecraft-ish font ONLY for address */
     .ip{
       font-family:"Press Start 2P", monospace;
       font-size:14px;
@@ -297,7 +367,7 @@
       line-height:1.4;
       user-select:all;
       word-break:break-word;
-      text-shadow: 0 0 10px rgba(255,255,255,.10);
+      text-shadow: 0 0 12px rgba(255,255,255,.12);
     }
 
     .badge{
@@ -339,15 +409,15 @@
       padding:12px 14px;
       border-radius:14px;
       border:none;
-      font-weight:1100;
-      background: linear-gradient(90deg, rgba(239,68,68,.95), rgba(34,197,94,.90));
+      font-weight:1200;
+      background: linear-gradient(90deg, rgba(239,68,68,.98), rgba(34,197,94,.92));
       color:#071018;
       cursor:pointer;
       transition: transform .15s ease, filter .2s ease;
       -webkit-tap-highlight-color: transparent;
-      box-shadow: 0 12px 32px rgba(0,0,0,.42);
+      box-shadow: 0 14px 40px rgba(0,0,0,.46);
     }
-    .btn:hover{ filter: brightness(1.06); }
+    .btn:hover{ filter: brightness(1.08); }
     .btn:active{ transform: scale(.97); }
 
     .subbtn{
@@ -358,7 +428,7 @@
       border:1px solid rgba(55,70,90,.78);
       background: rgba(255,255,255,.04);
       color: var(--text);
-      font-weight:1000;
+      font-weight:1100;
       cursor:pointer;
       -webkit-tap-highlight-color: transparent;
       transition: transform .15s ease, background .2s ease;
@@ -379,7 +449,7 @@
       gap:10px;
       flex-wrap:wrap;
     }
-    .strong{ color: var(--text); font-weight:1100; }
+    .strong{ color: var(--text); font-weight:1200; }
 
     .barWrap{
       margin-top:12px;
@@ -424,7 +494,7 @@
       font-size:13px;
       color: var(--muted);
       margin-bottom:8px;
-      font-weight:1100;
+      font-weight:1200;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -458,7 +528,6 @@
 
     .page{ display:none; }
     .page.active{ display:block; }
-
     .grid{
       display:grid;
       grid-template-columns: 1fr;
@@ -472,7 +541,7 @@
       inset:0;
       background: rgba(0,0,0,.55);
       display:none;
-      z-index:5;
+      z-index:6;
       align-items:center;
       justify-content:center;
       padding:20px;
@@ -500,15 +569,12 @@
       gap:10px;
       margin-bottom:10px;
     }
-    .modalTitle{
-      font-weight:1200;
-      letter-spacing:-.2px;
-    }
+    .modalTitle{ font-weight:1200; letter-spacing:-.2px; }
     .closeBtn{
       border:1px solid rgba(55,70,90,.85);
       background: rgba(255,255,255,.04);
       color: var(--text);
-      font-weight:1100;
+      font-weight:1200;
       border-radius:12px;
       padding:8px 10px;
       cursor:pointer;
@@ -530,11 +596,11 @@
       gap:10px;
     }
     .player + .player{ border-top: 1px solid rgba(55,70,90,.55); }
-    .pname{ font-weight:1100; }
+    .pname{ font-weight:1200; }
     .puuid{ color: rgba(169,176,186,.85); font-size:12px; }
 
     @media (prefers-reduced-motion: reduce){
-      .flake{ display:none; }
+      .flake, .gift, .sp{ display:none; }
       .card{ animation:none; }
       .statusDot{ animation:none; }
       .btn,.tab,.subbtn,.fill{ transition:none; }
@@ -545,7 +611,10 @@
 </head>
 
 <body>
+  <div class="sparkles" id="sparkles"></div>
+  <div class="confetti" id="confetti"></div>
   <div class="snow" id="snow"></div>
+  <div class="snow2" id="snow2"></div>
 
   <div class="topbar" role="navigation" aria-label="Site navigation">
     <button class="tab" id="tabHome" type="button">Home</button>
@@ -553,10 +622,10 @@
   </div>
 
   <main class="card">
-    <!-- lights -->
+    <div class="wreathGlow" aria-hidden="true"></div>
+
     <div class="lights" aria-hidden="true">
       <div class="wire"></div>
-      <!-- bulbs injected by JS -->
       <div id="bulbs"></div>
     </div>
 
@@ -575,7 +644,7 @@
           <h1>Mnwab</h1>
         </div>
       </div>
-      <div class="byline">by <span class="x">lnvnl</span> • Merry Christmas 🎄</div>
+      <div class="byline">by <span class="x">lnvnl</span> 🎄</div>
 
       <div class="section">
         <div class="label">Server Address (Java)</div>
@@ -624,7 +693,7 @@
         <img class="srv-icon" id="srvIcon2" alt="Server icon" />
         <h1>Status</h1>
       </div>
-      <div class="byline">lnvnl.org/#status</div>
+      <div class="byline">lnvnl.org/#status 🎄</div>
 
       <div class="grid">
         <div class="section">
@@ -818,6 +887,7 @@
         playerList.innerHTML = `<div class="player"><div class="pname">No player list available</div><div class="puuid">Some servers hide it</div></div>`;
         return;
       }
+
       for(const p of list){
         const row = document.createElement("div");
         row.className = "player";
@@ -886,7 +956,6 @@
         lastUpdatedAt = Date.now();
 
         const online = !!d.online;
-
         setStatus(statusDotHome, statusTextHome, online);
         statusTextStatus.textContent = online ? "Online" : "Offline";
 
@@ -962,23 +1031,22 @@
       srvIcon2.onerror = () => srvIcon2.style.display = "none";
     }
 
-    function makeSnow(){
-      const container = document.getElementById("snow");
+    function makeSnow(containerId, count, minSize, maxSize, minDur, maxDur, drift){
+      const container = document.getElementById(containerId);
       const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if(reduceMotion) return;
 
-      const count = 95; // more festive
       for(let i=0;i<count;i++){
         const f = document.createElement("div");
         f.className = "flake";
-        const size = 2.0 + Math.random()*4.8;
+        const size = minSize + Math.random()*(maxSize-minSize);
         f.style.width = size + "px";
         f.style.height = size + "px";
         f.style.left = (Math.random()*100) + "%";
-        f.style.opacity = (0.22 + Math.random()*0.70);
-        f.style.animationDuration = (8 + Math.random()*12) + "s";
+        f.style.opacity = (0.18 + Math.random()*0.75);
+        f.style.animationDuration = (minDur + Math.random()*(maxDur-minDur)) + "s";
         f.style.animationDelay = (Math.random()*10) + "s";
-        f.style.setProperty("--drift", (Math.random()*60 - 30) + "px");
+        f.style.setProperty("--drift", (Math.random()*drift - drift/2) + "px");
         container.appendChild(f);
       }
     }
@@ -986,29 +1054,81 @@
     function makeLights(){
       const holder = document.getElementById("bulbs");
       const colors = [
-        "rgba(239,68,68,.95)",   // red
-        "rgba(34,197,94,.95)",   // green
-        "rgba(251,191,36,.95)",  // gold
-        "rgba(255,255,255,.95)"  // white
+        "rgba(239,68,68,.98)",
+        "rgba(34,197,94,.98)",
+        "rgba(251,191,36,.98)",
+        "rgba(255,255,255,.98)"
       ];
-      const count = 14;
+      const count = 16;
       for(let i=0;i<count;i++){
         const b = document.createElement("div");
         b.className = "bulb";
         b.style.left = (i*(100/(count-1))) + "%";
         b.style.transform = "translateX(-50%)";
-        b.style.background = colors[i % colors.length];
-        b.style.animationDelay = (Math.random()*1.8) + "s";
-        b.style.boxShadow = `0 0 22px ${colors[i % colors.length]}`;
+        const c = colors[i % colors.length];
+        b.style.background = c;
+        b.style.animationDelay = (Math.random()*1.4) + "s";
+        b.style.boxShadow = `0 0 30px ${c}`;
         holder.appendChild(b);
+      }
+    }
+
+    function makeSparkles(){
+      const s = document.getElementById("sparkles");
+      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if(reduceMotion) return;
+
+      const count = 55;
+      for(let i=0;i<count;i++){
+        const e = document.createElement("div");
+        e.className = "sp";
+        e.style.left = (Math.random()*100) + "%";
+        e.style.top = (Math.random()*100) + "dvh";
+        e.style.animationDelay = (Math.random()*4.2) + "s";
+        e.style.animationDuration = (3.5 + Math.random()*3.5) + "s";
+        s.appendChild(e);
+      }
+    }
+
+    function makeGifts(){
+      const c = document.getElementById("confetti");
+      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if(reduceMotion) return;
+
+      const colors = [
+        "rgba(239,68,68,.22)",
+        "rgba(34,197,94,.20)",
+        "rgba(251,191,36,.20)",
+        "rgba(255,255,255,.14)"
+      ];
+      const count = 14; // subtle
+      for(let i=0;i<count;i++){
+        const g = document.createElement("div");
+        g.className = "gift";
+        g.style.left = (Math.random()*100) + "%";
+        g.style.opacity = (0.12 + Math.random()*0.22);
+        g.style.animationDuration = (18 + Math.random()*16) + "s";
+        g.style.animationDelay = (Math.random()*10) + "s";
+        g.style.setProperty("--drift", (Math.random()*90 - 45) + "px");
+        g.style.background = colors[i % colors.length];
+        g.style.width = (8 + Math.random()*8) + "px";
+        g.style.height = g.style.width;
+        c.appendChild(g);
       }
     }
 
     // Init
     route();
     setIcon();
-    makeSnow();
+
+    makeSparkles();
+    makeGifts();
     makeLights();
+
+    // layered snow: back small, front bigger
+    makeSnow("snow", 95, 1.8, 4.4, 10, 20, 70);
+    makeSnow("snow2", 55, 3.2, 6.4, 8, 14, 90);
+
     loadStatus();
     loadLatest();
 
