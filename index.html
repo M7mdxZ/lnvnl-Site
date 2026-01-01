@@ -480,50 +480,60 @@
       font-weight: 650;
       white-space: nowrap;
     }
+    
     .dots{
       display:flex;
-      flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
       align-items:center;
+      width: 100%;
+      flex-wrap: nowrap;
     }
+    /* Uptime "pills" (12 segments) */
     .dot{
-      width: 10px;
-      height: 10px;
+      position: relative;
+      flex: 1;
+      height: 12px;
+      min-width: 8px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,.14);
-      background: rgba(245,245,247,.10);
-      box-shadow: 0 0 0 0 rgba(127,155,116,0);
-      transition: transform .12s ease, box-shadow .12s ease;
+      background: rgba(245,245,247,.07);
+      overflow: hidden;
+
+      /* fill animation */
+      --fill: rgba(127,155,116,.72);
+      --fill-scale: 0;
     }
+    .dot::before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      background: var(--fill);
+      transform: scaleX(var(--fill-scale));
+      transform-origin: left center;
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+    }
+
     .dot.online{
-      background: rgba(127,155,116,.72);
-      border-color: rgba(127,155,116,.45);
-      box-shadow: 0 0 0 6px rgba(127,155,116,.08);
+      --fill: rgba(127,155,116,.78);
+      --fill-scale: 1;
+      border-color: rgba(127,155,116,.38);
     }
     .dot.offline{
-      background: rgba(235,95,106,.70);
-      border-color: rgba(235,95,106,.40);
-      box-shadow: 0 0 0 6px rgba(235,95,106,.07);
+      --fill: rgba(232,107,107,.70);
+      --fill-scale: 1;
+      border-color: rgba(232,107,107,.36);
     }
     .dot.unknown{
-      background: rgba(245,245,247,.12);
-      border-color: rgba(245,245,247,.14);
-      box-shadow: none;
+      --fill: rgba(245,245,247,.22);
+      --fill-scale: 1;
+      border-color: rgba(245,245,247,.18);
     }
-
-.dot.empty{
-  background: rgba(245,245,247,.06);
-  border-color: rgba(255,255,255,.10);
-  box-shadow: none;
-  opacity: .55;
-}
-
-    .dot:last-child{
-      transform: scale(1.08);
+    .dot.empty{
+      --fill-scale: 0;
+      border-color: rgba(245,245,247,.10);
+      background: rgba(245,245,247,.05);
     }
-
-
-    .toast {
+.toast {
       margin-top: 14px;
       text-align: center;
       font-size: 13px;
@@ -726,7 +736,7 @@
         
         <div class="uptime" aria-label="Uptime last checks">
           <div class="uptimeTop">
-            <div class="uptimeTitle">Uptime (last 24)</div>
+            <div class="uptimeTitle">Uptime (last 12)</div>
             <div class="uptimeMeta" id="uptimeMetaHome">—</div>
           </div>
           <div class="dots" id="uptimeDotsHome"></div>
@@ -780,7 +790,7 @@
           <div class="label">Uptime</div>
           <div class="uptime">
             <div class="uptimeTop">
-              <div class="uptimeTitle">Last 24 checks</div>
+              <div class="uptimeTitle">Last 12 checks</div>
               <div class="uptimeMeta" id="uptimeMetaStatus">—</div>
             </div>
             <div class="dots" id="uptimeDotsStatus"></div>
@@ -874,10 +884,10 @@
 // Recommended: Cloudflare Worker + KV with an hourly Cron trigger.
 //
 // Endpoint format (GET):
-//   { updated: <epoch_ms>, checks: [ { t:<epoch_ms>, s:1|0 } ] }   // keep last 24
+//   { updated: <epoch_ms>, checks: [ { t:<epoch_ms>, s:1|0 } ] }   // keep last 12
 //
 const UPTIME_ENDPOINT = "https://lnvnl-site.mohammed-fazze2006.workers.dev/uptime";
-const HISTORY_MAX = 24;
+const HISTORY_MAX = 12;
 
 function fmtAgo(ts) {
   if (!ts) return "—";
@@ -897,20 +907,11 @@ function renderUptimeFromChecks(checks, updatedTs) {
 
     elDots.innerHTML = "";
 
-    // make sure we always show exactly 24 dots
+    // make sure we always show exactly 12 segments
     const pad = Math.max(0, HISTORY_MAX - shown.length);
 
     let on = 0, off = 0;
-
-    // left padding (empty dots)
-    for (let i = 0; i < pad; i++) {
-      const dot = document.createElement("span");
-      dot.className = "dot empty";
-      dot.title = "No data";
-      elDots.appendChild(dot);
-    }
-
-    for (const it of shown) {
+for (const it of shown) {
       const state = it?.s;
       if (state === 1) on++;
       else if (state === 0) off++;
@@ -921,6 +922,15 @@ function renderUptimeFromChecks(checks, updatedTs) {
       const when = it?.t ? new Date(it.t) : null;
       dot.title = `${state === 1 ? "Online" : state === 0 ? "Offline" : "Unknown"} • ${when ? when.toLocaleString() : "—"}`;
 
+      elDots.appendChild(dot);
+    }
+
+
+    // right padding (empty segments)
+    for (let i = 0; i < pad; i++) {
+      const dot = document.createElement("span");
+      dot.className = "dot empty";
+      dot.title = "No data";
       elDots.appendChild(dot);
     }
 
