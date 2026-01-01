@@ -681,7 +681,54 @@
     @media (prefers-reduced-motion: reduce){
       * { animation: none !important; transition: none !important; }
     }
-  </style>
+
+    /* --- Responsive fixes (small screens / narrow devices) --- */
+    @media (max-width: 520px) {
+      /* stop vertical centering so it doesn't look "shrunk" on some phones */
+      body{
+        place-items: start center;
+        padding-top: calc(86px + env(safe-area-inset-top)); /* leaves room for topbar */
+      }
+      .card{
+        padding: 22px 18px;
+        border-radius: 26px;
+      }
+      .topbar{ padding: 5px; }
+      .tab{ padding: 9px 14px; font-size: 13px; }
+    }
+
+    @media (max-width: 420px) {
+      /* make top rows wrap cleanly instead of clipping */
+      .uptimeTop{
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 6px 10px;
+      }
+      .uptimeMeta{
+        white-space: normal;
+      }
+
+      /* uptime pills: less gap so they don't become tiny circles */
+      .dots{
+        gap: 5px;
+      }
+      .dot{
+        min-width: 0;
+        height: 10px;
+      }
+
+      /* tighten badges a bit */
+      .badge{ font-size: 12px; }
+      .btn{ padding: 12px 14px; }
+    }
+
+    @media (max-width: 360px) {
+      .dots{ gap: 4px; }
+      .dot{ height: 9px; }
+      .tab{ padding: 8px 12px; }
+    }
+
+</style>
 </head>
 
 <body>
@@ -736,7 +783,7 @@
         
         <div class="uptime" aria-label="Uptime last checks">
           <div class="uptimeTop">
-            <div class="uptimeTitle">Uptime (last 12Hrs)</div>
+            <div class="uptimeTitle">Uptime (last 12 hours)</div>
             <div class="uptimeMeta" id="uptimeMetaHome">—</div>
           </div>
           <div class="dots" id="uptimeDotsHome"></div>
