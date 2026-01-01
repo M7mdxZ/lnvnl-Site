@@ -510,6 +510,14 @@
       border-color: rgba(245,245,247,.14);
       box-shadow: none;
     }
+
+.dot.empty{
+  background: rgba(245,245,247,.06);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: none;
+  opacity: .55;
+}
+
     .dot:last-child{
       transform: scale(1.08);
     }
@@ -859,74 +867,100 @@
     let lastData = null;
 
 
-    // Uptime dots (stores last checks locally)
-    const HISTORY_KEY = "mnwab_uptime_v1";
-    const HISTORY_MAX = 24;
+    
+// Uptime dots (GLOBAL)
+// Your old uptime was different per device because it used localStorage (browser storage is per device/account).
+// To make it identical everywhere + update hourly even when nobody visits, use a tiny shared endpoint.
+// Recommended: Cloudflare Worker + KV with an hourly Cron trigger.
+//
+// Endpoint format (GET):
+//   { updated: <epoch_ms>, checks: [ { t:<epoch_ms>, s:1|0 } ] }   // keep last 24
+//
+const UPTIME_ENDPOINT = ""; // e.g. "https://your-worker.yourname.workers.dev/uptime"
+const HISTORY_MAX = 24;
 
-    function loadHistory() {
-      try {
-        const raw = localStorage.getItem(HISTORY_KEY);
-        const arr = raw ? JSON.parse(raw) : [];
-        return Array.isArray(arr) ? arr : [];
-      } catch {
-        return [];
-      }
+function fmtAgo(ts) {
+  if (!ts) return "—";
+  const s = Math.max(0, Math.floor((Date.now() - ts) / 1000));
+  if (s < 60) return `${s}s ago`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  return `${h}h ago`;
+}
+
+function renderUptimeFromChecks(checks, updatedTs) {
+  const shown = Array.isArray(checks) ? checks.slice(-HISTORY_MAX) : [];
+
+  function fill(elDots, elMeta) {
+    if (!elDots || !elMeta) return;
+
+    elDots.innerHTML = "";
+
+    // make sure we always show exactly 24 dots
+    const pad = Math.max(0, HISTORY_MAX - shown.length);
+
+    let on = 0, off = 0;
+
+    // left padding (empty dots)
+    for (let i = 0; i < pad; i++) {
+      const dot = document.createElement("span");
+      dot.className = "dot empty";
+      dot.title = "No data";
+      elDots.appendChild(dot);
     }
 
-    function saveHistory(arr) {
-      try {
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(arr));
-      } catch {}
+    for (const it of shown) {
+      const state = it?.s;
+      if (state === 1) on++;
+      else if (state === 0) off++;
+
+      const dot = document.createElement("span");
+      dot.className = "dot " + (state === 1 ? "online" : state === 0 ? "offline" : "unknown");
+
+      const when = it?.t ? new Date(it.t) : null;
+      dot.title = `${state === 1 ? "Online" : state === 0 ? "Offline" : "Unknown"} • ${when ? when.toLocaleString() : "—"}`;
+
+      elDots.appendChild(dot);
     }
 
-    function recordHistory(state) {
-      const h = loadHistory();
-      h.push({ t: Date.now(), s: state }); // s: 1 online, 0 offline, -1 unknown
-      while (h.length > HISTORY_MAX) h.shift();
-      saveHistory(h);
-      renderUptime();
+    const denom = on + off;
+    if (!shown.length) {
+      elMeta.textContent = UPTIME_ENDPOINT ? `No data yet • updated ${fmtAgo(updatedTs)}` : "Set UPTIME_ENDPOINT for global uptime";
+    } else if (!denom) {
+      elMeta.textContent = `No signal • updated ${fmtAgo(updatedTs)}`;
+    } else {
+      const pct = Math.round((on / denom) * 100);
+      elMeta.textContent = `${pct}% online • ${on}/${denom} • updated ${fmtAgo(updatedTs)}`;
     }
+  }
 
-    function renderUptime() {
-      const h = loadHistory();
-      const shown = h.slice(-HISTORY_MAX);
+  fill(uptimeDotsHome, uptimeMetaHome);
+  fill(uptimeDotsStatus, uptimeMetaStatus);
+}
 
-      function fill(elDots, elMeta) {
-        if (!elDots || !elMeta) return;
+async function fetchUptimeHistory() {
+  if (!UPTIME_ENDPOINT) {
+    return { updated: null, checks: [] };
+  }
+  try {
+    const r = await fetch(UPTIME_ENDPOINT, { cache: "no-store" });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j = await r.json();
+    const checks = Array.isArray(j?.checks) ? j.checks : [];
+    const updated = typeof j?.updated === "number" ? j.updated : (checks.length ? checks[checks.length - 1]?.t : null);
+    return { updated, checks };
+  } catch (e) {
+    return { updated: null, checks: [] };
+  }
+}
 
-        elDots.innerHTML = "";
-        let on = 0, off = 0, unk = 0;
+async function renderUptime() {
+  const { updated, checks } = await fetchUptimeHistory();
+  renderUptimeFromChecks(checks, updated);
+}
 
-        for (const it of shown) {
-          if (it.s === 1) on++;
-          else if (it.s === 0) off++;
-          else unk++;
-
-          const dot = document.createElement("span");
-          dot.className = "dot " + (it.s === 1 ? "online" : it.s === 0 ? "offline" : "unknown");
-
-          const time = new Date(it.t).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-          const label = it.s === 1 ? "Online" : it.s === 0 ? "Offline" : "Unknown";
-          dot.title = `${label} • ${time}`;
-          elDots.appendChild(dot);
-        }
-
-        const denom = on + off;
-        if (!shown.length) {
-          elMeta.textContent = "—";
-        } else if (!denom) {
-          elMeta.textContent = "No signal yet";
-        } else {
-          const pct = Math.round((on / denom) * 100);
-          elMeta.textContent = `${pct}% online • ${on}/${denom}${unk ? ` • ${unk} ?` : ""}`;
-        }
-      }
-
-      fill(uptimeDotsHome, uptimeMetaHome);
-      fill(uptimeDotsStatus, uptimeMetaStatus);
-    }
-
-    function showToast(msg) {
+function showToast(msg) {
       toast.textContent = msg;
       toast.classList.add("show");
       clearTimeout(showToast._t);
@@ -1111,7 +1145,7 @@
         lastUpdatedAt = Date.now();
 
         const online = !!d.online;
-        recordHistory(online ? 1 : 0);
+        // uptime history is global (worker) — no per-visit recording here
         setStatus(statusDotHome, statusTextHome, online);
         statusTextStatus.textContent = online ? "Online" : "Offline";
 
@@ -1148,7 +1182,7 @@
         playersBtnStatus.textContent = `View Players (${hint})`;
 
       } catch {
-        recordHistory(-1);
+        // uptime history is global (worker) — no per-visit recording here
         statusTextHome.textContent = "Unavailable";
         statusTextStatus.textContent = "Unavailable";
         playersTextHome.textContent = "Players: —/—";
@@ -1196,6 +1230,8 @@
 
     setInterval(loadStatus, 120000);
     setInterval(loadLatest, 120000);
+    setInterval(renderUptime, 3600000);
+
     setInterval(() => {
       setUpdatedLabel(updatedTextHome);
       setUpdatedLabel(updatedTextStatus);
